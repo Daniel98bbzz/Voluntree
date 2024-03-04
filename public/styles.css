@@ -1,4 +1,9 @@
-/*this is the start of index2.html */
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+
 .main-header {
     display: flex;
     justify-content: space-between;
@@ -9,13 +14,34 @@
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 1000;
+    box-shadow: 5 2px 5px rgba(0, 0, 0, 0.3);
+    /* Optional: adds shadow for depth */
+}
+
+.main-header::after {
+    content: '';
+    /* Required for pseudo-elements */
+    display: block;
+    /* Allows us to set a width and height */
+    position: absolute;
+    /* Positions the pseudo-element relative to the header */
+    bottom: 0;
+    /* Aligns the pseudo-element to the bottom of the header */
+    left: 0;
+    /* Aligns the pseudo-element to the left of the header */
+    width: 100%;
+    /* Makes the pseudo-element span the full width of the header */
+    height: 2px;
+    /* The thickness of your horizontal line */
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Adjust color and opacity as desired */
+    z-index: -1;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: white;
-    margin: 0;
-    padding: 0;
+    padding-top: 60px;
+    /* Adjust this value to the height of your header */
 }
 
 .return-icon {
@@ -28,12 +54,14 @@ body {
     margin-top: 8px;
 }
 
+/* Ensure that both icons are displayed and aligned to the right */
 .notifications-icon,
 .chat-icon {
     background: none;
     border: none;
     /* Adjust the width to your liking */
     margin: 0 10px;
+    /* Adjust spacing between the icons */
 }
 
 .notifications-icon {
@@ -50,477 +78,51 @@ body {
     margin-left: -290px;
     width: 40px;
     top: 1px;
+
+
 }
 
 .notification,
 .chat {
     display: block;
+    /* This ensures the image is displayed */
     max-width: 100%;
+    /* This constrains the image to the button's size */
     height: auto;
+    /* Maintain aspect ratio */
     margin-top: 10px;
 }
 
 .header-logo {
+    /* Keep these styles as provided earlier */
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
     width: 80px;
+    /* Adjust if necessary */
     height: auto;
 }
 
+/* You might not need this if you want to show both icons */
 .notifications-icon:last-child,
 .chat-icon:last-child {
     margin-right: 0;
     /* Remove right margin from the last icon */
 }
-.project-card {
-    text-align: left; 
-    padding: 16px;
-    color: rgb(0, 0, 0);
-}
-.title-and-rating h1 {
-    margin: 0 0 8px 0; 
-    font-size: 1.5em;
-}
-.project-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 0.5em; 
-}
 
-.project-rating {
-    display: flex;
-    align-items: center; /* Vertically center the stars and text */
-    margin-top: 8px; /* Adds a bit of space between the title and the rating */
-}
-.stars,
-.number-of-reviews {
-    margin-right: 8px; /* Adds spacing between the stars and the review count */
-    color:#F29F05;
-    line-height: 1;
-}
-
-.number-of-reviews {
-    color: #000000; 
-    font-size: 0.8em; 
-}
-
-.badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 4px;
-    color: rgb(0, 0, 0);
-    font-size: 15px;
-    background-color: #ffffff; /* Orange background */
-}
-
-.project-badges {
-    align-items: center;
-    margin-left: 0; 
-    justify-content: flex-start;
-}
-
-p{
-    font-size: 15px;;
-    font-weight: lighter;
-}
-h2{
-    font-size: 20px;
-}
-.project-description  {
-    margin-top: 1; 
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.project-details section {
-    padding: 16px;
-}
-
-.project-details section:last-child {
-    border: none;
-}
-
-.apply-button {
-    display: block;
-    margin: 40px auto; 
-    padding: 10px 50px; 
-    border: none;
-    border-radius: 4px;
-    background-color: #5aaf32; 
-    color: #000000;
-    font-size: 0.9em;
-    cursor: pointer;
-}
-
-.details-list {
-    list-style: none; 
-    padding-left: 0; 
-}
-
-.details-list li {
-    padding: 5px 0;
-    display: flex; 
-    align-items: center; 
-}
-
-.details-list li strong {
-    margin-right: 10px; 
-}
-
-.include-list {
-    list-style: none;
-    padding-left: 0;
-}
-
-.include-list li {
-    padding: 5px 0;
-    display: flex;
-    align-items: center;
-}
-
-.include-list img {
-    margin-right: 10px;
-}
-
-.project-nav {
-    display: flex;
-    justify-content: center; 
-    padding: 0;
-    margin: 0;
-    background-color: #ffffff; 
-}
-
-.tab-button {
-    background: transparent;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    color: #333; 
-    transition: color 0.3s, border-bottom 0.3s;
-}
-.tab-button:hover,
-.tab-button.active {
-    color: #4CAF50; 
-    border-bottom: 2px solid #4CAF50; 
-}
-
-
-.badge .icon {
-    height: 1em;
-    width: auto; 
-    margin-right: 0.5em; 
-   
-}
-
-.details-list .icon {
-    width: 24px; 
-    height: auto;
-    margin-right: 8px;
-    vertical-align: middle;
-}
-
-.include-list .icon{
-    width: 24px;
-    height: auto;
-    margin-right: 8px; 
-    vertical-align: middle; 
-}
-
-.tab-content {
-    display: none; 
-}
-
-.active-content {
-    display: block; 
-}
-
-.project-image {
-    width: 100%; 
-    display: block; 
-    margin-top: 70px; 
-    margin-bottom: 0px; 
-    border-radius: 20px; 
-}
-
+/* Further adjustments for mobile screens */
 @media (max-width: 768px) {
-    .project-card {
-        width: 90%;
+
+    .notifications-icon,
+    .chat-icon {
+        margin-right: 5px;
+        /* Adjust the right margin on smaller screens */
     }
-    .region {
-        width: auto;
-        margin-right: 10px;
-      }
-      .farm {
-        width: auto;
-        margin-right: 10px;
-      }
-      .opportunity {
-        flex: 0 0 calc(50% - 20px); /* Set width for two columns on mobile */
-      }
-}
-/*nir code*/
-
-  .main-header img {
-    height: 40px;
-  }
-  .return-icon, .notifications-icon, .chat-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  .return-icon:hover, .notifications-icon:hover, .chat-icon:hover {
-    opacity: 0.8;
-  }
-  .container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  .rectangle {
-    width: 90%;
-    max-width: 600px; /* Adjusted width */
-    background-color: green;
-    color: white;
-    padding: 20px;
-    margin: 70px auto 20px; /* Adjusted margin */
-    text-align: center;
-    border-radius: 10px;
-  }
-  
-  
-  .button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: white;
-    color: green;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-top: 10px;
-  }
-  .selection-heading {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 40px;
-    margin-bottom: 20px;
-  }
-  .region-container {
-    display: flex;
-    overflow-x: auto; 
-    -webkit-overflow-scrolling: touch;
-  }
-  
-.region {
-    flex: 1;
-    text-align: center;
-    padding: 20px;
-    margin: 0 10px;
-    background-color: white;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-    white-space: nowrap; 
-  }
-  
-  .next-to-you {
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 40px;
-    margin-bottom: 20px;
-  }
-  .farm-container {
-    display: flex;
-    overflow-x: auto; 
-    -webkit-overflow-scrolling: touch; 
-  }
-  .farm {
-    flex: 1;
-    text-align: center;
-    padding: 30px;
-    margin: 0 10px;
-    background-color: white;
-    border-radius: 15px;
-    border: 2px solid #ccc;
-    white-space: nowrap;
-  }
-  .farm-link {
-    flex: 0 0 calc(33.33% - 20px);
-    text-decoration: none; 
-  }
-  
-  .rating {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .rating input[type="radio"] {
-    display: none;
-  }
-  
-  .rating label {
-    font-size: 24px; /* Adjust the size of the star icons */
-    color: #ccc; /* Color for empty star */
-    cursor: pointer;
-  }
-  
-  .rating input[type="radio"]:checked ~ label {
-    color: gold; /* Color for filled star */
-  }
-  .farm p {
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .farm img {
-    width: 100%; /* Make the image fill the width of its container */
-    height: auto; /* Maintain the aspect ratio */
-    max-width: 150px; /* Set the maximum width of the image */
-    max-height: 100px; /* Set the maximum height of the image */
-    border-radius: 10px; /* Apply border radius for rectangle shape */
-    margin-bottom: 10px; /* Add some bottom margin for spacing */
-  }
-  
-  .region p {
-    color: black;
-    font-size: 16px;
-    font-weight: bold;
-  }
-  .opportunity-container {
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  .opportunity {
-    flex: 0 0 calc(33.33% - 20px);
-    margin: 10px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 15px;
-    border: 2px solid #ccc;
-    display: flex;
-    align-items: center;
-  }
-  
-  .opportunity img {
-    flex-shrink: 0; /* Prevent image from shrinking */
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-    max-height: 80px; /* Adjust maximum height of the image */
-    border-radius: 10px;
-    margin-right: 10px;
-  }
-  
-  .opportunity-text {
-    flex-grow: 1;
-  }
-  
-  .opportunity p.title {
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  .opportunity p.description {
-    color: black;
-    font-size: 16px;
-    overflow: hidden; /* Prevent text from overflowing */
-    text-overflow: ellipsis; /* Add ellipsis for overflow text */
-    white-space: nowrap; /* Prevent text from wrapping */
-  }
-  
-  
-  .selection-heading, .next-to-you, .all-opportunities {
-    font-size: 20px; 
-    margin-top: 20px; 
-    margin-bottom: 10px; }
-
-    
-    .volunteer-footer {
-      display: flex;
-      flex-direction: column;
-      /* Stack elements vertically */
-      align-items: center;
-      /* Center-align children */
-      text-align: center;
-      /* Center-align text for all children */
-      padding: 5px;
-      background: #f5f5f5;
-  }
-
-
-
-
-
-.footer-menu {
-  width: 100%;
-  background-color: #ffffff;
-  /* Adjust the background color as needed */
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  /* Optional shadow for a lifted look */
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  /* Fixed at the bottom */
-  z-index: 1000;
-  /* Ensure it's above other content */
 }
 
-.footer-nav {
-  display: flex;
-  justify-content: space-around;
-  /* Evenly space the navigation items */
-  align-items: center;
-  padding: 10px 0;
-  /* Padding at the top and bottom */
-}
 
-.footer-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* Center the icon and text */
-  text-decoration: none;
-  /* Remove underline from links */
-  color: black;
-  /* Adjust the text color as needed */
-  font-size: 0.8125rem;
-  /* Adjust the font size as needed */
-}
 
-.footer-icon {
-  width: 24px;
-  /* Adjust the icon size as needed */
-  height: 24px;
-  /* Adjust the icon size as needed */
-  margin-bottom: 4px;
-  /* Space between the icon and the text */
-}
 
-/* Ensure icons and text remain centered on smaller screens */
-@media (max-width: 768px) {
-  .footer-nav {
-      justify-content: space-between;
-      /* Adjust spacing for smaller screens */
-  }
-
-  .footer-item {
-      padding: 0 10px;
-      /* Adjust padding for smaller screen sizes */
-  }
-}
-
-/* Add to the end of your existing media query */
-@media (max-width: 768px) {
-  .footer-menu {
-      position: fixed;
-      width: 100%;
-      bottom: 0;
-  }
-}
 
 
 
@@ -828,8 +430,6 @@ h2{
 }
 
 
-
-
 .footer-menu {
     width: 100%;
     background-color: #ffffff;
@@ -896,11 +496,46 @@ h2{
         bottom: 0;
     }
 }
-@media (max-width: 768px) {
 
-    .notifications-icon,
-    .chat-icon {
-        margin-right: 5px;
-        /* Adjust the right margin on smaller screens */
-    }
+
+
+
+/*form css:*/
+
+/* Form Styling */
+/* Specific styles for addOpportunity.html */
+.opportunity-form {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    background: #f5f5f5;
+    max-width: 90%;
+}
+
+.opportunity-form h2 {
+    text-align: center;
+    color: #3399CC;
+}
+
+.form-input,
+.opportunity-form button.submit-button {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.form-input {
+    width: calc(100% - 22px);
+    /* Adjust input width considering padding and border */
+}
+
+.opportunity-form button.submit-button {
+    background-color: #FFA500;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
