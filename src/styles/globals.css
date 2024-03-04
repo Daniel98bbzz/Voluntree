@@ -1,0 +1,1153 @@
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 5 2px 5px rgba(0, 0, 0, 0.3);
+  /* Optional: adds shadow for depth */
+}
+
+.main-header::after {
+  content: "";
+  /* Required for pseudo-elements */
+  display: block;
+  /* Allows us to set a width and height */
+  position: absolute;
+  /* Positions the pseudo-element relative to the header */
+  bottom: 0;
+  /* Aligns the pseudo-element to the bottom of the header */
+  left: 0;
+  /* Aligns the pseudo-element to the left of the header */
+  width: 100%;
+  /* Makes the pseudo-element span the full width of the header */
+  height: 2px;
+  /* The thickness of your horizontal line */
+  background-color: rgba(0, 0, 0, 0.1);
+  /* Adjust color and opacity as desired */
+  z-index: -1;
+}
+
+body {
+  font-family: "Arial", sans-serif;
+  background: white;
+  margin: 0;
+  padding: 0;
+}
+
+.return-icon {
+  background: none;
+  border: none;
+}
+
+.return {
+  width: 20px;
+  margin-top: 8px;
+}
+
+.notifications-icon,
+.chat-icon {
+  background: none;
+  border: none;
+  /* Adjust the width to your liking */
+  margin: 0 10px;
+}
+
+.notifications-icon {
+  position: relative;
+  right: 35px;
+  top: 1px;
+  width: 47px;
+  margin-bottom: 8px;
+}
+
+.chat-icon {
+  position: relative;
+  right: 25px;
+  margin-left: -290px;
+  width: 40px;
+  top: 1px;
+}
+
+.notification,
+.chat {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+
+.header-logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: auto;
+}
+
+.notifications-icon:last-child,
+.chat-icon:last-child {
+  margin-right: 0;
+  /* Remove right margin from the last icon */
+}
+
+.project-card {
+  text-align: left;
+  padding: 16px;
+  color: rgb(0, 0, 0);
+}
+
+.title-and-rating h1 {
+  margin: 0 0 8px 0;
+  font-size: 1.5em;
+}
+
+.project-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.project-rating {
+  display: flex;
+  align-items: center;
+  /* Vertically center the stars and text */
+  margin-top: 8px;
+  /* Adds a bit of space between the title and the rating */
+}
+
+.stars,
+.number-of-reviews {
+  margin-right: 8px;
+  /* Adds spacing between the stars and the review count */
+  color: #f29f05;
+  line-height: 1;
+}
+
+.number-of-reviews {
+  color: #000000;
+  font-size: 0.8em;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: rgb(0, 0, 0);
+  font-size: 15px;
+  background-color: #ffffff;
+  /* Orange background */
+}
+
+.badge2 {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: rgb(0, 0, 0);
+  font-size: 15px;
+  background-color: #ffffff;
+  /* Orange background */
+}
+
+.project-badges {
+  align-items: center;
+  margin-left: 0;
+  justify-content: flex-start;
+  display: flex;
+  column-gap: 10px;
+  margin-top: 12px;
+}
+
+p {
+  font-size: 15px;
+  font-weight: lighter;
+}
+
+h2 {
+  font-size: 20px;
+}
+
+.project-description {
+  margin-top: 1;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.project-details section {
+  padding: 0px;
+}
+
+.project-details section:last-child {
+  border: none;
+}
+
+.apply-button {
+  display: block;
+  margin: 40px auto;
+  padding: 10px 50px;
+  border: none;
+  border-radius: 4px;
+  background-color: #5aaf32;
+  color: #000000;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+.details-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.details-list li {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.details-list li strong {
+  margin-right: 10px;
+}
+
+.include-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.include-list li {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.include-list img {
+  margin-right: 10px;
+}
+
+.project-nav {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background-color: #ffffff;
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.tab-button:hover,
+.tab-button.active {
+  color: #4caf50;
+  border-bottom: 2px solid #4caf50;
+}
+
+.badge .icon,
+.badge2 .icon {
+  height: 1em;
+  width: auto;
+  margin-right: 0.5em;
+}
+
+.details-list .icon {
+  width: 24px;
+  height: auto;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.include-list .icon {
+  width: 24px;
+  height: auto;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.tab-content {
+  display: none;
+}
+
+.active-content {
+  display: block;
+}
+
+.project-image {
+  width: 100%;
+  display: block;
+  margin-top: 70px;
+  margin-bottom: 0px;
+}
+
+@media (max-width: 768px) {
+  .project-card {
+    width: 90%;
+  }
+
+  .region {
+    width: auto;
+    margin-right: 10px;
+  }
+
+  .farm {
+    width: auto;
+    margin-right: 10px;
+  }
+
+  .opportunity {
+    flex: 0 0 calc(50% - 20px);
+    /* Set width for two columns on mobile */
+  }
+}
+
+/*nir code*/
+
+.main-header img {
+  height: 40px;
+}
+
+.return-icon,
+.notifications-icon,
+.chat-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.return-icon:hover,
+.notifications-icon:hover,
+.chat-icon:hover {
+  opacity: 0.8;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.rectangle {
+  width: 90%;
+  max-width: 600px;
+  /* Adjusted width */
+  background-color: green;
+  color: white;
+  padding: 20px;
+  margin: 70px auto 20px;
+  /* Adjusted margin */
+  text-align: center;
+  border-radius: 10px;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: white;
+  color: green;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.selection-heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.region-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.region {
+  flex: 1;
+  text-align: center;
+  padding: 20px;
+  margin: 0 10px;
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  white-space: nowrap;
+}
+
+.next-to-you {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+.farm-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.farm {
+  flex: 1;
+  text-align: center;
+  padding: 30px;
+  margin: 0 10px;
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid #ccc;
+  white-space: nowrap;
+}
+
+.farm-link {
+  flex: 0 0 calc(33.33% - 20px);
+  text-decoration: none;
+}
+
+.rating {
+  display: flex;
+  justify-content: center;
+}
+
+.rating input[type="radio"] {
+  display: none;
+}
+
+.rating label {
+  font-size: 24px;
+  /* Adjust the size of the star icons */
+  color: #ccc;
+  /* Color for empty star */
+  cursor: pointer;
+}
+
+.rating input[type="radio"]:checked ~ label {
+  color: gold;
+  /* Color for filled star */
+}
+
+.farm p {
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.farm img {
+  width: 100%;
+  /* Make the image fill the width of its container */
+  height: auto;
+  /* Maintain the aspect ratio */
+  max-width: 150px;
+  /* Set the maximum width of the image */
+  max-height: 100px;
+  /* Set the maximum height of the image */
+  border-radius: 10px;
+  /* Apply border radius for rectangle shape */
+  margin-bottom: 10px;
+  /* Add some bottom margin for spacing */
+}
+
+.region p {
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.opportunity-container {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.opportunity {
+  flex: 0 0 calc(33.33% - 20px);
+  margin: 10px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 15px;
+  border: 2px solid #ccc;
+  display: flex;
+  align-items: center;
+}
+
+.opportunity img {
+  flex-shrink: 0;
+  /* Prevent image from shrinking */
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  max-height: 80px;
+  /* Adjust maximum height of the image */
+  border-radius: 10px;
+  margin-right: 10px;
+}
+
+.opportunity-text {
+  flex-grow: 1;
+}
+
+.opportunity p.title {
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.opportunity p.description {
+  color: black;
+  font-size: 16px;
+  overflow: hidden;
+  /* Prevent text from overflowing */
+  text-overflow: ellipsis;
+  /* Add ellipsis for overflow text */
+  white-space: nowrap;
+  /* Prevent text from wrapping */
+}
+
+.selection-heading,
+.next-to-you,
+.all-opportunities {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.volunteer-footer {
+  display: flex;
+  flex-direction: column;
+  /* Stack elements vertically */
+  align-items: center;
+  /* Center-align children */
+  text-align: center;
+  /* Center-align text for all children */
+  padding: 5px;
+  background: #f5f5f5;
+}
+
+.footer-menu {
+  width: 100%;
+  background-color: #ffffff;
+  /* Adjust the background color as needed */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  /* Optional shadow for a lifted look */
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  /* Fixed at the bottom */
+  z-index: 1000;
+  /* Ensure it's above other content */
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-around;
+  /* Evenly space the navigation items */
+  align-items: center;
+  padding: 10px 0;
+  /* Padding at the top and bottom */
+}
+
+.footer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Center the icon and text */
+  text-decoration: none;
+  /* Remove underline from links */
+  color: black;
+  /* Adjust the text color as needed */
+  font-size: 0.8125rem;
+  /* Adjust the font size as needed */
+}
+
+.footer-icon {
+  width: 24px;
+  /* Adjust the icon size as needed */
+  height: 24px;
+  /* Adjust the icon size as needed */
+  margin-bottom: 4px;
+  /* Space between the icon and the text */
+}
+
+/* Ensure icons and text remain centered on smaller screens */
+@media (max-width: 768px) {
+  .footer-nav {
+    justify-content: space-between;
+    /* Adjust spacing for smaller screens */
+  }
+
+  .footer-item {
+    padding: 0 10px;
+    /* Adjust padding for smaller screen sizes */
+  }
+}
+
+/* Add to the end of your existing media query */
+@media (max-width: 768px) {
+  .footer-menu {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+}
+
+.opportunity-form {
+  display: flex;
+  flex-direction: column;
+  margin: 90px auto;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background: #f5f5f5;
+  max-width: 90%;
+}
+
+.opportunity-form h2 {
+  text-align: center;
+  color: #3399cc;
+}
+
+.form-input,
+.opportunity-form button.submit-button {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.form-input {
+  width: calc(100% - 22px);
+  /* Adjust input width considering padding and border */
+}
+
+.opportunity-form button.submit-button {
+  background-color: #ffa500;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.volunteer-card {
+  max-width: 640px;
+  margin: 20px auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.14), 0 1px 5px rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  background: white;
+  font-family: Arial, sans-serif;
+  /* Example font */
+}
+
+.volunteer-card-header {
+  position: relative;
+}
+
+.volunteer-header-image {
+  width: 100%;
+  display: block;
+}
+
+.heart-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  /* Assuming a white heart icon as per the image */
+}
+
+/* Badge styles */
+.badge {
+  position: absolute;
+  background-color: #ffa500;
+  /* Example color */
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+}
+.badge2 {
+  background-color: #ffa500;
+  /* Example color */
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+}
+
+.high-demand {
+  top: 10px;
+  left: 10px;
+}
+
+.location {
+  bottom: 10px;
+  left: 10px;
+}
+
+.volunteer-content {
+  padding: 16px;
+  background-color: #f5f5f5;
+  /* Light grey background for content */
+}
+
+.volunteer-title {
+  font-size: 1.5em;
+  color: #3399cc;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.volunteer-rating {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.rating {
+  color: #f29f05;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.star {
+  width: 18px;
+  margin-bottom: 2px;
+}
+
+.total-ratings {
+  color: #727272;
+}
+
+.volunteer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #727272;
+  font-size: 0.8125rem;
+  margin: 10px 0;
+}
+
+.volunteer-description {
+  color: #727272;
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+.volunteer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f5f5f5;
+  justify-content: center;
+  /* Blue background for footer */
+}
+
+.volunteer-services {
+  display: flex;
+  justify-content: space-around;
+  /* This spreads out the service blocks across the container */
+  align-items: center;
+  /* This centers the items vertically */
+}
+
+.volunteer-services .service {
+  color: rgb(0, 0, 0);
+  font-size: 0.8125rem;
+  text-align: center;
+  margin-left: 50px;
+}
+
+.service {
+  display: flex;
+  flex-direction: column;
+  /* Stacks items vertically */
+  align-items: center;
+  /* Centers the items horizontally */
+  margin-right: 16px;
+  /* Adjust the space between the services if needed */
+}
+
+.service-icon {
+  width: 20px;
+  /* Adjust the size of your icon */
+  height: 20px;
+  /* Adjust the size of your icon */
+  margin-bottom: 8px;
+  /* Adjust the space between the icon and the text */
+}
+
+/* Make sure the last service does not have a margin to the right */
+.service:last-child {
+  margin-right: 0;
+}
+
+.details-button {
+  position: relative;
+  background: #ffa500;
+  /* Example color */
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  border-radius: 5px;
+  left: 70px;
+
+  /* Rounded corners for the button */
+}
+
+/* Responsive adjustments could be here if needed */
+
+/* Base styles go here (which you've already defined) */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 640px;
+  margin: 0 10px;
+}
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+  .volunteer-services {
+    display: flex;
+    justify-content: center;
+    /* Center the services container horizontally */
+    align-items: center;
+    /* Center the services container vertically */
+    flex-wrap: wrap;
+    /* Allow items to wrap if necessary */
+    width: 100%;
+    /* Full width of the parent container */
+    margin: 0;
+    /* Remove any default margins */
+    padding: 0;
+    /* Remove any default padding */
+  }
+
+  .service {
+    flex-grow: 1;
+    /* Allow the service items to grow and take up equal space */
+    flex-basis: 0;
+    /* Start with 0 width and grow equally */
+    display: flex;
+    /* Display as flex to align icon and text */
+    flex-direction: column;
+    /* Stack icon and text vertically */
+    align-items: center;
+    /* Center-align the text and icon */
+    justify-content: center;
+    /* Center vertically in case of wrap */
+    margin: 5px;
+    /* Provide some space around the items */
+    text-align: center;
+    /* Center-align the text */
+  }
+
+  .service-icon {
+    width: 24px;
+    /* Icon width */
+    height: 24px;
+    /* Icon height */
+    margin-bottom: 4px;
+    /* Space between icon and text */
+  }
+
+  .details-button {
+    width: 100%;
+    /* Allow the button to size according to its content */
+    padding: 10px 14px;
+    /* Padding inside the button */
+    margin-top: 10px;
+    /* Space above the button */
+    border-radius: 5px;
+    /* Rounded corners for the button */
+    font-size: 0.8125rem;
+    /* Font size */
+    background: #ffa500;
+    /* Background color */
+    color: white;
+    /* Text color */
+    border: none;
+    /* Remove border */
+    cursor: pointer;
+    /* Cursor to pointer */
+    text-transform: uppercase;
+    /* Uppercase text */
+    align-self: center;
+    /* Center the button */
+  }
+
+  .details-button {
+    left: auto;
+    position: relative;
+    /* Ensure it's relative for auto left to work */
+  }
+
+  /* Adjust the padding or margins as needed for smaller screens */
+  .volunteer-card {
+    padding: 0;
+    /* Remove padding if necessary for alignment */
+  }
+
+  .heart-button {
+    top: 5px;
+    right: 5px;
+  }
+
+  .badge,
+  .badge2 {
+    font-size: 0.65rem;
+    padding: 3px 6px;
+  }
+
+  .volunteer-title,
+  .rating,
+  .total-ratings,
+  .volunteer-info,
+  .volunteer-description {
+    font-size: 0.75rem;
+  }
+
+  .volunteer-rating img.star {
+    width: 16px;
+    height: 16px;
+  }
+
+  .volunteer-footer {
+    display: flex;
+    flex-direction: column;
+    /* Stack elements vertically */
+    align-items: center;
+    /* Center-align children */
+    text-align: center;
+    /* Center-align text for all children */
+    padding: 5px;
+    background: #f5f5f5;
+  }
+}
+
+.footer-menu {
+  width: 100%;
+  background-color: #ffffff;
+  /* Adjust the background color as needed */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  /* Optional shadow for a lifted look */
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  /* Fixed at the bottom */
+  z-index: 1000;
+  /* Ensure it's above other content */
+}
+
+.footer-nav {
+  display: flex;
+  justify-content: space-around;
+  /* Evenly space the navigation items */
+  align-items: center;
+  padding: 10px 0;
+  /* Padding at the top and bottom */
+}
+
+.footer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Center the icon and text */
+  text-decoration: none;
+  /* Remove underline from links */
+  color: black;
+  /* Adjust the text color as needed */
+  font-size: 0.8125rem;
+  /* Adjust the font size as needed */
+}
+
+.footer-icon {
+  width: 24px;
+  /* Adjust the icon size as needed */
+  height: 24px;
+  /* Adjust the icon size as needed */
+  margin-bottom: 4px;
+  /* Space between the icon and the text */
+}
+
+/* Ensure icons and text remain centered on smaller screens */
+@media (max-width: 768px) {
+  .footer-nav {
+    justify-content: space-between;
+    /* Adjust spacing for smaller screens */
+  }
+
+  .footer-item {
+    padding: 0 10px;
+    /* Adjust padding for smaller screen sizes */
+  }
+}
+
+/* Add to the end of your existing media query */
+@media (max-width: 768px) {
+  .footer-menu {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .notifications-icon,
+  .chat-icon {
+    margin-right: 5px;
+    /* Adjust the right margin on smaller screens */
+  }
+}
+
+/*//////////// 
+
+///////////*/
+
+.filter_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 62px;
+  background: #0000002c;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+}
+
+.filter_modal .modal {
+  padding: 8px 25px;
+  background: white;
+  width: 100%;
+  position: relative;
+}
+
+.filter_modal h3 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.filter_modal .modal ul {
+  list-style-type: none;
+  padding: 0px;
+}
+
+.filter_modal .modal ul li {
+  margin: 18px 0;
+}
+
+.radio_filter {
+  font-size: 17px;
+  color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 10px;
+}
+
+.icon_close {
+  position: absolute;
+  right: 25px;
+  top: 27px;
+}
+
+.container-login {
+  max-width: 300px;
+  margin: 80px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.container-login form input[type="email"],
+.container-login form input[type="text"],
+.container-login form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.container-login form input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #5cb85c;
+  color: white;
+  cursor: pointer;
+}
+.container-login form input[type="submit"]:hover {
+  background: #4cae4c;
+}
+
+.container-register {
+  max-width: 300px;
+  margin: 80px auto;
+  padding: 20px;
+  text-align: center;
+}
+.container-register form input[type="email"],
+.container-register form input[type="text"],
+.container-register form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.container-register form input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #337ab7;
+  color: white;
+  cursor: pointer;
+}
+.container-register form input[type="submit"]:hover {
+  background: #286090;
+}
+
+.header-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding: 5px 15px 13px 15px;
+}
+
+.search-filter {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  column-gap: 3px;
+  padding-bottom: 6px;
+}
+
+.search-filter input[type="search"] {
+  appearance: none;
+  border: none;
+  outline: none;
+  font-size: 17px;
+}
+
+button {
+  appearance: none;
+  border: none;
+  background: white;
+  padding: 0;
+}
