@@ -1,0 +1,49 @@
+/* About.module.css */
+.aboutContainer {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .heroSection {
+    background-image: url('/Images/aboutvolu.jpg');
+    background-size: cover;
+    background-position: center;
+    text-align: center;
+    padding: 150px 20px;
+  }
+  
+  .heroTitle {
+    color: white;
+    margin: 0;
+    font-size: 3rem;
+  }
+  
+  .contentWrapper {
+    width: 100%;
+    max-width: 800px; /* Adjust the width as per your design requirement */
+    box-shadow: 0 0 10px rgba(0, 150, 0, 0.5); /* subtle shadow for the bounding box */
+    border: 1px solid green; /* green border as requested */
+    margin: -100px 20px 20px; /* Adjust margin to fit your content and design */
+    background: white;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  .contentSection {
+    text-align: center;
+  }
+  
+  .introText {
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .whatIsTitle {
+    color: green; /* Setting the h2 title to green */
+    margin-top: 20px;
+  }
+  
+  /* Continue adding more styles as necessary to match your design */
+  
