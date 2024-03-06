@@ -1,7 +1,6 @@
-var mongoose = require("mongoose");
-var bcrypt = require("bcrypt");
+import mongoose from "mongoose";
 
-var UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   email: {
     type: String,
     unique: true,
@@ -24,49 +23,46 @@ var UserSchema = new mongoose.Schema({
     enum: ["farmer", "volunteer"],
     required: true,
   },
+  test: {
+    type: String,
+    required: false,
+  },
+  applications: [
+    {
+      date: {
+        type: Date,
+        required: true,
+      },
+      title: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      approved: {
+        type: Number,
+        required: false,
+        default: 0, //0 - Pending, 1 - Declined, 2 - Approved
+      },
+      farmer_id: {
+        type: String,
+        required: true,
+      },
+      volunteer_id: {
+        type: String,
+        required: true,
+      },
+      opportunity_id: {
+        type: String,
+        required: true,
+      },
+      volunteer_username: {
+        type: String,
+        required: false,
+      },
+    },
+  ],
 });
 
-// Authenticate input against database documents
-UserSchema.statics.authenticate = function (email, password, callback) {
-  User.findOne({ email: email }).exec(function (err, user) {
-    if (err) {
-      return callback(err);
-    } else if (!user) {
-      var err = new Error("User not found.");
-      err.status = 401;
-      return callback(err);
-    }
-    bcrypt.compare(password, user.password, function (err, result) {
-      if (result === true) {
-        return callback(null, user);
-      } else {
-        return callback(new Error("Password mismatch"));
-      }
-    });
-  });
-};
+const User = mongoose.models.users || mongoose.model("users", userSchema);
 
-// Hashing password before saving to the database
-UserSchema.pre("save", function (next) {
-  var user = this;
-  bcrypt.hash(user.password, 10, function (err, hash) {
-    if (err) {
-      return next(err);
-    }
-    user.password = hash;
-    if (user.passwordConf) {
-      bcrypt.hash(user.passwordConf, 10, function (err, hashConf) {
-        if (err) {
-          return next(err);
-        }
-        user.passwordConf = hashConf;
-        next();
-      });
-    } else {
-      next();
-    }
-  });
-});
-
-var User = mongoose.model("User", UserSchema);
-module.exports = User;
+export default User;

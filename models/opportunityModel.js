@@ -33,6 +33,7 @@ const Opportunity = new mongoose.Schema({
       accommodation: Boolean,
     },
     about_farmer: String,
+    farmer_id: String,
   },
   location_details: {
     coordinates: {
