@@ -1,15 +1,17 @@
-// pages/about.js
 import Head from "next/head";
 import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
 import { useState } from "react";
 import Link from "next/link";
-import styles from '../styles/About.module.css'; 
+import styles from "../styles/About.module.css"; 
 
 const About = () => {
     return (
+      
+
       <div className={styles.aboutContainer}>
         <div className={styles.heroSection}>
+        <Header />
           <h1 className={styles.heroTitle}>About Voluntree</h1>
         </div>
         <div className={styles.contentWrapper}>
@@ -27,6 +29,7 @@ const About = () => {
             <h4>Embrace the land. Empower the farmer. Enrich your life. Voluntree—where technology meets tradition.</h4>
           </div>
         </div>
+        <Footer />
       </div>
     );
 };
