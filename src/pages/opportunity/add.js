@@ -2,6 +2,7 @@ import Head from "next/head";
 import Header from "../../../public/Components/Header";
 import Footer from "../../../public/Components/Footer";
 import { useState } from "react";
+<<<<<<< HEAD
 import jwt from "jsonwebtoken";
 
 export async function getServerSideProps(context) {
@@ -36,6 +37,10 @@ export default function AddOpportunity({ user }) {
     }
   }
 
+=======
+
+export default function AddOpportunity() {
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   const [formData, setFormData] = useState({
     title: "",
     location: "",
@@ -77,6 +82,7 @@ export default function AddOpportunity({ user }) {
       <main>
         <Header />
 
+<<<<<<< HEAD
         {blockPage ? (
           <>
             <p style={{ marginTop: 120, textAlign: "center" }}>
@@ -192,6 +198,115 @@ export default function AddOpportunity({ user }) {
             </form>
           </div>
         )}
+=======
+        <div style={{ margin: "0px 10px" }}>
+          <form
+            id="addOpportunityForm"
+            className="opportunity-form"
+            onSubmit={handleSubmit}
+          >
+            <h2>Add New Opportunity</h2>
+            <input
+              type="text"
+              name="title"
+              placeholder="Title"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="location"
+              placeholder="Location"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <textarea
+              name="description"
+              placeholder="Description"
+              required
+              className="form-input"
+              onChange={handleChange}
+            ></textarea>
+            <input
+              type="text"
+              name="header_image"
+              placeholder="Header Image URL"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="number"
+              name="rating_score"
+              placeholder="Rating Score"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="number"
+              name="total_reviews"
+              placeholder="Total Reviews"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="number"
+              name="price_per_week"
+              placeholder="Price per Week"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="currency"
+              placeholder="Currency"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="number"
+              name="duration_min"
+              placeholder="Minimum Duration (weeks)"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="number"
+              name="duration_max"
+              placeholder="Maximum Duration (weeks)"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="number"
+              name="minimum_age"
+              placeholder="Minimum Age"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="services"
+              placeholder="Services (comma-separated)"
+              required
+              className="form-input"
+              onChange={handleChange}
+            />
+            <button type="submit" className="submit-button">
+              Add Opportunity
+            </button>
+          </form>
+        </div>
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 
         <Footer />
       </main>

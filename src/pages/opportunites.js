@@ -9,12 +9,23 @@ import opportunityModel from "../../models/opportunityModel";
 import mongoose from "mongoose";
 import Link from "next/link";
 import { useRef, useState } from "react";
+<<<<<<< HEAD
 import { OpportunityDetails } from '../pages/opportunity/[opportunity_id].js';
+=======
+
+
+
+
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 
 export async function getServerSideProps() {
   try {
     let client = await mongoose.connect(process.env.DATABASE_URL);
     const opportunities = await opportunityModel.find();
+<<<<<<< HEAD
+=======
+
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
     return {
       props: { data: JSON.stringify(opportunities) },
     };
@@ -25,6 +36,10 @@ export async function getServerSideProps() {
   }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 export default function Home({ data }) {
   const opportunities = data != "Error" ? JSON.parse(data) : "";
   console.log(opportunities);
@@ -61,14 +76,19 @@ export default function Home({ data }) {
   }
 
   const FilterModal = useRef(null);
+<<<<<<< HEAD
   
   if (user != "null") {
     userData = JSON.parse(user);
   }
+=======
+
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 
 
 
   
+<<<<<<< HEAD
   async function favoriteOpportunity() {
     const favoriteData = {
       volunteer_id: userData.id,
@@ -93,6 +113,8 @@ export default function Home({ data }) {
     } catch (error) {}
   }
 
+=======
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   return (
     <>
       <Head>
@@ -171,6 +193,7 @@ export default function Home({ data }) {
                 <article key={i} className="volunteer-card">
                   <header className="volunteer-card-header">
                     <img
+<<<<<<< HEAD
                       src={`/Images/${opportunity.header_image}`}
                       alt="Beach with turtle"
                       className="volunteer-header-image"
@@ -194,6 +217,17 @@ export default function Home({ data }) {
                       <div className="badge high-demand">In High Demand</div>
                     )}
                      
+=======
+                      src={opportunity.header_image}
+                      alt="Beach with turtle"
+                      className="volunteer-header-image"
+                    />
+                    <button className="heart-button">♥</button>
+                    {opportunity.high_demand && (
+                      <div className="badge high-demand">In High Demand</div>
+                    )}
+
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
                     <div className="badge location">{opportunity.location}</div>
                   </header>
                   <div className="volunteer-content">
@@ -210,10 +244,17 @@ export default function Home({ data }) {
                       </span>
                     </div>
                     <div className="volunteer-info">
+<<<<<<< HEAD
                       <span className="volunteer-price">
                         {opportunity.cost.price_per_week}
                         {opportunity.cost.currency} per week
                       </span>
+=======
+                      {/* <span className="volunteer-price">
+                        {opportunity.cost.price_per_week}
+                        {opportunity.cost.currency} per week
+                      </span> */}
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
                       <span className="volunteer-duration">
                         {opportunity.cost.duration_weeks.min} -{" "}
                         {opportunity.cost.duration_weeks.max} weeks
@@ -228,6 +269,7 @@ export default function Home({ data }) {
                   </div>
                   <div className="volunteer-footer">
                     <div className="volunteer-services">
+<<<<<<< HEAD
                       {opportunity.services.map((s, index) => (
                         <div key={index} className="service">
                           <img
@@ -236,6 +278,16 @@ export default function Home({ data }) {
                             alt="Airport Taxi Icon"
                           />
                           <span>{s.name}</span>
+=======
+                      {opportunity.services.slice(-3).map((service, index) => (
+                        <div key={index} className="service">
+                          <img
+                            className="service-icon"
+                            src={`/Images/svgs/servicesSvgs/${service.name}.svg`}
+                            alt={`${service.name} Icon`}
+                          />
+                          <span>{service.name}</span>
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
                         </div>
                       ))}
                     </div>

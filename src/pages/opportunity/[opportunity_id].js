@@ -5,6 +5,7 @@ import Footer from "../../../public/Components/Footer";
 import mongoose from "mongoose";
 import opportunityModel from "../../../models/opportunityModel";
 import { useState } from "react";
+<<<<<<< HEAD
 import Link from "next/link";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
@@ -14,6 +15,11 @@ export async function getServerSideProps(context) {
   
   const { opportunity_id } = context.params;
   const { req } = context;
+=======
+
+export async function getServerSideProps(context) {
+  const { opportunity_id } = context.params;
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 
   try {
     if (opportunity_id) {
@@ -22,6 +28,7 @@ export async function getServerSideProps(context) {
         _id: opportunity_id,
       });
 
+<<<<<<< HEAD
       const jwtSession = req.cookies.jwtSession;
       const userSession = jwt.decode(jwtSession);
 
@@ -38,10 +45,23 @@ export async function getServerSideProps(context) {
   } catch (error) {
     return {
       props: { data: "error", user: "null" },
+=======
+      return {
+        props: { data: JSON.stringify(opportunities) },
+      };
+    }
+    return {
+      props: { data: "error" },
+    };
+  } catch (error) {
+    return {
+      props: { data: "error" },
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
     };
   }
 }
 
+<<<<<<< HEAD
 export default function OpportunityDetails({ data, user }) {
   const opportunity = JSON.parse(data)[0];
 
@@ -77,6 +97,13 @@ export default function OpportunityDetails({ data, user }) {
       router.push("/applications");
     } catch (error) {}
   }
+=======
+export default function OpportunityDetails({ data }) {
+  const opportunity = JSON.parse(data)[0];
+  console.log(opportunity);
+
+  const [currentTab, setCurrentTab] = useState(0);
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   return (
     <>
       <Head>
@@ -180,6 +207,7 @@ export default function OpportunityDetails({ data, user }) {
                   </p>
                 </div>
               </div>
+<<<<<<< HEAD
               {userData ? (
                 userData.role == "volunteer" && (
                   <button
@@ -194,6 +222,11 @@ export default function OpportunityDetails({ data, user }) {
                   Login To Apply
                 </Link>
               )}
+=======
+              <button type="button" className="apply-button">
+                Apply
+              </button>
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
             </section>
 
             <section

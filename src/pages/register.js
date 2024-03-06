@@ -3,7 +3,10 @@ import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
 import { useState } from "react";
 import Link from "next/link";
+<<<<<<< HEAD
 import { useRouter } from "next/router";
+=======
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -13,8 +16,11 @@ export default function Register() {
     confirmPassword: "",
   });
 
+<<<<<<< HEAD
   const route = useRouter();
 
+=======
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -25,6 +31,7 @@ export default function Register() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+<<<<<<< HEAD
 
     const createUser = async () => {
       const res = await fetch("/api/users/register", {
@@ -51,6 +58,10 @@ export default function Register() {
       formData.password == formData.confirmPassword
     )
       createUser();
+=======
+    // Add logic to submit the form data to the backend
+    console.log(formData);
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   };
   return (
     <>
@@ -103,7 +114,10 @@ export default function Register() {
               value={formData.confirmPassword}
               onChange={handleChange}
             />
+<<<<<<< HEAD
 
+=======
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
             <input type="submit" value="Register" />
           </form>
           <p>

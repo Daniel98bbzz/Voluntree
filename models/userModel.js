@@ -39,9 +39,15 @@ const userSchema = new mongoose.Schema({
         trim: true,
       },
       approved: {
+<<<<<<< HEAD
         type: Boolean,
         required: false,
         default: false,
+=======
+        type: Number,
+        required: false,
+        default: 0, //0 - Pending, 1 - Declined, 2 - Approved
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
       },
       farmer_id: {
         type: String,
@@ -55,6 +61,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
+<<<<<<< HEAD
     },
   ],
   favorites: [
@@ -84,11 +91,17 @@ const userSchema = new mongoose.Schema({
       opportunity_id: {
         type: String,
         required: true,
+=======
+      volunteer_username: {
+        type: String,
+        required: false,
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
       },
     },
   ],
 });
 
+<<<<<<< HEAD
 // // Authenticate input against database documents
 // UserSchema.statics.authenticate = function (email, password, callback) {
 //   User.findOne({ email: email }).exec(function (err, user) {
@@ -104,6 +117,8 @@ const userSchema = new mongoose.Schema({
 //         return callback(null, user);
 //       } else {
 //         return callback(new Error
+=======
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 const User = mongoose.models.users || mongoose.model("users", userSchema);
 
 export default User;

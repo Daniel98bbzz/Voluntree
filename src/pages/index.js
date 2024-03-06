@@ -2,8 +2,49 @@
 import Head from "next/head";
 import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
+<<<<<<< HEAD
 
 export default function Home() {
+=======
+import Link from "next/link";
+
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const protocol = req.headers.referer
+    ? req.headers.referer.split(":")[0]
+    : "http";
+  const host = req.headers.host;
+
+  const hostUrl = `${protocol}://${host}`;
+  try {
+    const res = await fetch(`${hostUrl}/api/opportunities`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const opportunities = await res.json();
+
+    return {
+      props: { data: JSON.stringify(opportunities) },
+    };
+  } catch (error) {
+    return {
+      props: { data: "Error" },
+    };
+  }
+}
+
+export default function Home({ data }) {
+  let opportunities;
+  try {
+    opportunities = JSON.parse(data);
+  } catch (error) {
+    opportunities = "Error";
+  }
+
+  console.log(opportunities);
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   return (
     <>
       <Head>
@@ -16,7 +57,11 @@ export default function Home() {
       <main>
         <Header />
 
+<<<<<<< HEAD
         <div className="container">
+=======
+        <div style={{ marginBottom: 70 }} className="container">
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
           <div className="rectangle">
             <p>More than volunteering</p>
             <p>Join us for meaningful volunteering</p>
@@ -24,12 +69,23 @@ export default function Home() {
               Experiences that connect a wide variety of populations to farmers
               who need help
             </p>
+<<<<<<< HEAD
             <a href="#" className="button">
               LEARN MORE
             </a>
           </div>
 
           <h2 className="selection-heading">SELECTION BY REGION</h2>
+=======
+            <Link href="/About" legacyBehavior>
+  <a className="button">LEARN MORE</a>
+</Link>
+          </div>
+
+          <h2 style={{ marginTop: 40 }} className="selection-heading">
+            SELECTION BY REGION
+          </h2>
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
           <div className="region-container">
             <div className="region">
               CENTRAL
@@ -45,6 +101,7 @@ export default function Home() {
             </div>
           </div>
 
+<<<<<<< HEAD
           <h2 className="next-to-you">NEXT TO YOU</h2>
           <div className="farm-container">
             <a href="farm1-page.html" className="farm-link">
@@ -68,6 +125,74 @@ export default function Home() {
             </a>
 
             <a href="farm2-page.html" className="farm-link">
+=======
+          <h2 style={{ marginTop: 40 }} className="next-to-you">
+            NEXT TO YOU
+          </h2>
+          <div className="farm-container">
+            {opportunities.data &&
+              opportunities.data.map((opportunity, i) => (
+                <Link
+                  key={i}
+                  href={`/opportunity/${opportunity._id}`}
+                  passHref
+                  className="farm-link"
+                >
+                  <div className="farm">
+                    <img
+                      src={`/Images/${opportunity.header_image}`}
+                      alt="Farm 1"
+                    />
+                    <p>{opportunity.title}</p>
+
+                    <div className="rating">
+                      {Array.from({
+                        length: Math.floor(opportunity.rating.score),
+                      }).map((star, i) => (
+                        <>
+                          <input
+                            key={i}
+                            type="radio"
+                            id={`star${i + 1}`}
+                            name={`rating${i + 1}`}
+                            value={i}
+                          />
+                          <label
+                            key={i}
+                            className="yellow"
+                            htmlFor={`star${i + 1}`}
+                          >
+                            &#9733;
+                          </label>
+                        </>
+                      ))}
+                      {Array.from({
+                        length: 5 - Math.floor(opportunity.rating.score),
+                      }).map((star, i) => (
+                        <>
+                          <input
+                            key={i}
+                            type="radio"
+                            id={`star${i + 1}`}
+                            name={`rating${i + 1}`}
+                            value={i}
+                          />
+                          <label
+                            key={i}
+                            className="gray"
+                            htmlFor={`star${i + 1}`}
+                          >
+                            &#9733;
+                          </label>
+                        </>
+                      ))}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+
+            {/* <a href="farm2-page.html" className="farm-link">
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
               <div className="farm">
                 <img src="/Images/R.jpeg" alt="Farm 2" />
                 <p>משק חקלאי במושב רוויה</p>
@@ -105,6 +230,7 @@ export default function Home() {
                   <label htmlFor="star15">&#9733;</label>
                 </div>
               </div>
+<<<<<<< HEAD
             </a>
           </div>
 
@@ -134,6 +260,34 @@ export default function Home() {
               <img src="opportunity3.jpg" alt="Opportunity 3" />
               <p>Opportunity 3</p>
             </div>
+=======
+            </a> */}
+          </div>
+
+          <h2 style={{ marginTop: 40 }} className="all-opportunities">
+            ALL THE OPPORTUNITIES
+          </h2>
+          <div className="opportunity-container">
+            {opportunities.data &&
+              opportunities.data.map((opportunity, i) => (
+                <Link
+                  style={{ textDecoration: "none" }}
+                  key={i}
+                  href={`/opportunity/${opportunity._id}`}
+                  className="opportunity"
+                  passHref
+                >
+                  <img
+                    src={`/Images/${opportunity.header_image}`}
+                    alt="Opportunity"
+                  />
+                  <div className="opportunity-text">
+                    <p className="title">{opportunity.title}</p>
+                    <p className="description">{opportunity.description}</p>
+                  </div>
+                </Link>
+              ))}
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
           </div>
         </div>
       </main>

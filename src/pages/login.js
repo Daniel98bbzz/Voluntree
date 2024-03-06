@@ -3,6 +3,7 @@ import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
 import { useState } from "react";
 import Link from "next/link";
+<<<<<<< HEAD
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
 
@@ -38,6 +39,10 @@ export async function getServerSideProps(context) {
 }
 
 export default function Login({ user }) {
+=======
+
+export default function Login() {
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -50,6 +55,7 @@ export default function Login({ user }) {
       [name]: value,
     });
   };
+<<<<<<< HEAD
   const route = useRouter();
 
   const handleSubmit = (e) => {
@@ -75,6 +81,13 @@ export default function Login({ user }) {
     };
 
     if (formData.email && formData.password) userLogin();
+=======
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add logic to submit the form data to the login endpoint
+    console.log(formData);
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   };
 
   return (

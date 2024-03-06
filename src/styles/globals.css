@@ -1151,6 +1151,7 @@ button {
   background: white;
   padding: 0;
 }
+<<<<<<< HEAD
 
 .my-applications {
   display: grid;
@@ -1252,3 +1253,5 @@ button {
   border-radius: 6px;
   margin-top: 20px;
 }
+=======
+>>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
