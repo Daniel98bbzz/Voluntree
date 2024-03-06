@@ -5,21 +5,13 @@ import Footer from "../../../public/Components/Footer";
 import mongoose from "mongoose";
 import opportunityModel from "../../../models/opportunityModel";
 import { useState } from "react";
-<<<<<<< HEAD
 import Link from "next/link";
 import { useRouter } from "next/router";
 import jwt from "jsonwebtoken";
-export { OpportunityDetails };
 
 export async function getServerSideProps(context) {
-  
   const { opportunity_id } = context.params;
   const { req } = context;
-=======
-
-export async function getServerSideProps(context) {
-  const { opportunity_id } = context.params;
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
 
   try {
     if (opportunity_id) {
@@ -28,7 +20,6 @@ export async function getServerSideProps(context) {
         _id: opportunity_id,
       });
 
-<<<<<<< HEAD
       const jwtSession = req.cookies.jwtSession;
       const userSession = jwt.decode(jwtSession);
 
@@ -45,25 +36,17 @@ export async function getServerSideProps(context) {
   } catch (error) {
     return {
       props: { data: "error", user: "null" },
-=======
-      return {
-        props: { data: JSON.stringify(opportunities) },
-      };
-    }
-    return {
-      props: { data: "error" },
-    };
-  } catch (error) {
-    return {
-      props: { data: "error" },
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
     };
   }
 }
 
-<<<<<<< HEAD
 export default function OpportunityDetails({ data, user }) {
-  const opportunity = JSON.parse(data)[0];
+  let opportunity;
+  try {
+    opportunity = JSON.parse(data)[0];
+  } catch (error) {
+    opportunity == "error";
+  }
 
   let userData;
   if (user != "null") {
@@ -80,6 +63,7 @@ export default function OpportunityDetails({ data, user }) {
       farmer_id: opportunity.information.farmer_id,
       title: opportunity.title,
       opportunity_id: opportunity._id,
+      volunteer_username: userData.username,
     };
     try {
       const res = await fetch("/api/apply", {
@@ -97,13 +81,6 @@ export default function OpportunityDetails({ data, user }) {
       router.push("/applications");
     } catch (error) {}
   }
-=======
-export default function OpportunityDetails({ data }) {
-  const opportunity = JSON.parse(data)[0];
-  console.log(opportunity);
-
-  const [currentTab, setCurrentTab] = useState(0);
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   return (
     <>
       <Head>
@@ -121,209 +98,205 @@ export default function OpportunityDetails({ data }) {
           alt="farmer image"
           className="project-image"
         />
-        <div style={{ marginBottom: 70 }} className="project-card">
-          <div className="title-and-rating">
-            <h1 id="projectTitle">{opportunity.title}</h1>
-            <div className="volunteer-rating">
-              <span className="rating" id="projectStars">
-                {opportunity.rating.score}
-              </span>
-              <img className="star" src="/Images/svgs/star.svg" alt="Star" />
-              <span
-                style={{ marginLeft: 5 }}
-                className="total-ratings"
-                id="projectReviews"
-              >
-                ({opportunity.rating.total_reviews})
-              </span>
+
+        {opportunity != "error" ? (
+          <div style={{ marginBottom: 70 }} className="project-card">
+            <div className="title-and-rating">
+              <h1 id="projectTitle">{opportunity.title}</h1>
+              <div className="volunteer-rating">
+                <span className="rating" id="projectStars">
+                  {opportunity.rating.score}
+                </span>
+                <img className="star" src="/Images/svgs/star.svg" alt="Star" />
+                <span
+                  style={{ marginLeft: 5 }}
+                  className="total-ratings"
+                  id="projectReviews"
+                >
+                  ({opportunity.rating.total_reviews})
+                </span>
+              </div>
             </div>
-          </div>
-          <nav className="project-nav">
-            <button
-              id="overviewTab"
-              className={`tab-button ${currentTab == 0 && "active"}`}
-              onClick={() => setCurrentTab(0)}
-            >
-              Overview
-            </button>
-            <button
-              id="informationTab"
-              className={`tab-button ${currentTab == 1 && "active"}`}
-              onClick={() => setCurrentTab(1)}
-            >
-              Information
-            </button>
-            <button
-              id="locationTab"
-              className={`tab-button ${currentTab == 2 && "active"}`}
-              onClick={() => setCurrentTab(2)}
-            >
-              Location
-            </button>
-          </nav>
-          <div className="project-details">
-            <section
-              id="overview"
-              style={{ display: currentTab == 0 ? `block` : `none` }}
-              className="tab-content"
-            >
-              <div className="project-badges">
-                <span className="badge2 verified">
-                  <img
-                    src="/Images/svgs/verified.svg"
-                    alt="Verified"
-                    className="icon"
-                  />{" "}
-                  Verified By Volunteer Membership
-                </span>
-                <span className="badge2 response-rate">
-                  <img
-                    src="/Images/svgs/messagesResponse-3.svg"
-                    alt="Response Rate"
-                    className="icon"
-                  />{" "}
-                  Very High Response Rate
-                </span>
-              </div>
-              <div className="project-description">
-                <h2>About Our Project</h2>
-                <p id="projectDescription">
-                  {opportunity.overview.detailed_description ?? ""}
-                </p>
-              </div>
-              <div className="project-reviews">
-                <h2>Ratings And Reviews</h2>
-                <div className="user-review">
-                  <span className="user-rating" id="userRating">
-                    <StarsView
-                      stars={opportunity.overview.reviews[0].rating ?? 0}
-                    />
+            <nav className="project-nav">
+              <button
+                id="overviewTab"
+                className={`tab-button ${currentTab == 0 && "active"}`}
+                onClick={() => setCurrentTab(0)}
+              >
+                Overview
+              </button>
+              <button
+                id="informationTab"
+                className={`tab-button ${currentTab == 1 && "active"}`}
+                onClick={() => setCurrentTab(1)}
+              >
+                Information
+              </button>
+              <button
+                id="locationTab"
+                className={`tab-button ${currentTab == 2 && "active"}`}
+                onClick={() => setCurrentTab(2)}
+              >
+                Location
+              </button>
+            </nav>
+            <div className="project-details">
+              <section
+                id="overview"
+                style={{ display: currentTab == 0 ? `block` : `none` }}
+                className="tab-content"
+              >
+                <div className="project-badges">
+                  <span className="badge2 verified">
+                    <img
+                      src="/Images/svgs/verified.svg"
+                      alt="Verified"
+                      className="icon"
+                    />{" "}
+                    Verified By Volunteer Membership
                   </span>
-                  <p className="user-comment" id="userComment">
-                    {opportunity.overview.reviews[0].comment ?? 0}...{" "}
-                    <a href="#" className="all-reviews">
-                      All The Reviews
-                    </a>
+                  <span className="badge2 response-rate">
+                    <img
+                      src="/Images/svgs/messagesResponse-3.svg"
+                      alt="Response Rate"
+                      className="icon"
+                    />{" "}
+                    Very High Response Rate
+                  </span>
+                </div>
+                <div className="project-description">
+                  <h2>About Our Project</h2>
+                  <p id="projectDescription">
+                    {opportunity.overview.detailed_description ?? ""}
                   </p>
                 </div>
-              </div>
-<<<<<<< HEAD
-              {userData ? (
-                userData.role == "volunteer" && (
-                  <button
-                    onClick={() => applyOpportunity()}
-                    className="apply-button"
-                  >
-                    Apply
-                  </button>
-                )
-              ) : (
-                <Link href={"/login"} passHref className="apply-button">
-                  Login To Apply
-                </Link>
-              )}
-=======
-              <button type="button" className="apply-button">
-                Apply
-              </button>
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
-            </section>
+                <div className="project-reviews">
+                  <h2>Ratings And Reviews</h2>
+                  <div className="user-review">
+                    <span className="user-rating" id="userRating">
+                      <StarsView
+                        stars={opportunity.overview.reviews[0].rating ?? 0}
+                      />
+                    </span>
+                    <p className="user-comment" id="userComment">
+                      {opportunity.overview.reviews[0].comment ?? 0}...{" "}
+                      <a href="#" className="all-reviews">
+                        All The Reviews
+                      </a>
+                    </p>
+                  </div>
+                </div>
+                {userData ? (
+                  userData.role == "volunteer" && (
+                    <button
+                      onClick={() => applyOpportunity()}
+                      className="apply-button"
+                    >
+                      Apply
+                    </button>
+                  )
+                ) : (
+                  <Link href={"/login"} passHref className="apply-button">
+                    Login To Apply
+                  </Link>
+                )}
+              </section>
 
-            <section
-              id="information"
-              style={{ display: currentTab == 1 ? `block` : `none` }}
-              className="tab-content"
-            >
-              <h2>Details</h2>
-              <ul className="details-list">
-                <li>
-                  <img
-                    src="/Images/svgsInformation/location1.svg"
-                    alt="Location"
-                    className="icon"
-                  />
-                  {opportunity.location_details.address}
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/calendar3.svg"
-                    alt="Calendar"
-                    className="icon"
-                  />{" "}
-                  {opportunity.information.details.availability}
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/clock.svg"
-                    alt="Clock"
-                    className="icon"
-                  />
-                  Working hours from{" "}
-                  {opportunity.information.details.working_hours}
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/group.svg"
-                    alt="People"
-                    className="icon"
-                  />{" "}
-                  Up to {opportunity.information.details.volunteers_needed}{" "}
-                  volunteer for single day
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/gauge1.svg"
-                    alt="Difficulty"
-                    className="icon"
-                  />{" "}
-                  Level of difficulty -{" "}
-                  {opportunity.information.details.difficulty_level}
-                </li>
-              </ul>
-              <h2>Include</h2>
-              <ul className="include-list">
-                {opportunity.information.includes.food_beverages && (
+              <section
+                id="information"
+                style={{ display: currentTab == 1 ? `block` : `none` }}
+                className="tab-content"
+              >
+                <h2>Details</h2>
+                <ul className="details-list">
                   <li>
                     <img
-                      src="/Images/svgsInformation/food.svg"
-                      alt="Food"
+                      src="/Images/svgsInformation/location1.svg"
+                      alt="Location"
+                      className="icon"
+                    />
+                    {opportunity.location_details.address}
+                  </li>
+                  <li>
+                    <img
+                      src="/Images/svgsInformation/calendar3.svg"
+                      alt="Calendar"
                       className="icon"
                     />{" "}
-                    Food & Beverages
+                    {opportunity.information.details.availability}
                   </li>
-                )}
+                  <li>
+                    <img
+                      src="/Images/svgsInformation/clock.svg"
+                      alt="Clock"
+                      className="icon"
+                    />
+                    Working hours from{" "}
+                    {opportunity.information.details.working_hours}
+                  </li>
+                  <li>
+                    <img
+                      src="/Images/svgsInformation/group.svg"
+                      alt="People"
+                      className="icon"
+                    />{" "}
+                    Up to {opportunity.information.details.volunteers_needed}{" "}
+                    volunteer for single day
+                  </li>
+                  <li>
+                    <img
+                      src="/Images/svgsInformation/gauge1.svg"
+                      alt="Difficulty"
+                      className="icon"
+                    />{" "}
+                    Level of difficulty -{" "}
+                    {opportunity.information.details.difficulty_level}
+                  </li>
+                </ul>
+                <h2>Include</h2>
+                <ul className="include-list">
+                  {opportunity.information.includes.food_beverages && (
+                    <li>
+                      <img
+                        src="/Images/svgsInformation/food.svg"
+                        alt="Food"
+                        className="icon"
+                      />{" "}
+                      Food & Beverages
+                    </li>
+                  )}
 
-                {opportunity.information.includes.internet_access && (
-                  <li>
-                    <img
-                      src="/Images/svgsInformation/wifi.svg"
-                      alt="WiFi"
-                      className="icon"
-                    />{" "}
-                    Internet Access
-                  </li>
-                )}
-                {opportunity.information.includes.internet_access && (
-                  <li>
-                    <img
-                      src="/Images/svgsInformation/bed1.svg"
-                      alt="Accommodation"
-                      className="icon"
-                    />{" "}
-                    Accommodation
-                  </li>
-                )}
-              </ul>
-              <h2>About The Farmer</h2>
-              <p>{opportunity.information.about_farmer}</p>
-            </section>
-            <section
-              id="location"
-              style={{ display: currentTab == 2 ? `block` : `none` }}
-              className="tab-content"
-            >
-              <h2>Location details</h2>
-              {/* <iframe
+                  {opportunity.information.includes.internet_access && (
+                    <li>
+                      <img
+                        src="/Images/svgsInformation/wifi.svg"
+                        alt="WiFi"
+                        className="icon"
+                      />{" "}
+                      Internet Access
+                    </li>
+                  )}
+                  {opportunity.information.includes.internet_access && (
+                    <li>
+                      <img
+                        src="/Images/svgsInformation/bed1.svg"
+                        alt="Accommodation"
+                        className="icon"
+                      />{" "}
+                      Accommodation
+                    </li>
+                  )}
+                </ul>
+                <h2>About The Farmer</h2>
+                <p>{opportunity.information.about_farmer}</p>
+              </section>
+              <section
+                id="location"
+                style={{ display: currentTab == 2 ? `block` : `none` }}
+                className="tab-content"
+              >
+                <h2>Location details</h2>
+                {/* <iframe
                 width="100%"
                 height="300"
                 frameborder="0"
@@ -335,10 +308,16 @@ export default function OpportunityDetails({ data }) {
               <iframe
                 src={`https://maps.google.com/maps?q=${opportunity.location_details.coordinates.lat},${opportunity.location_details.coordinates.lng}&hl=es;z=14&amp;output=embed`}
               ></iframe> */}
-            </section>
-            <section className="project-reviews"></section>
+              </section>
+              <section className="project-reviews"></section>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div style={{ marginTop: 90 }}>
+            <h4>No opportunity found.</h4>
+          </div>
+        )}
+
         <Footer />
       </main>
     </>

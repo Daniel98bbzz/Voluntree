@@ -13,12 +13,13 @@ export async function getServerSideProps(context) {
   const host = req.headers.host;
 
   const hostUrl = `${protocol}://${host}`;
-  console.log(hostUrl);
+
   try {
     const jwtSession = req.cookies.jwtSession;
     const userSession = jwt.decode(jwtSession);
 
     const userData = JSON.parse(JSON.stringify(userSession));
+    console.log(userData);
 
     try {
       const res = await fetch(
@@ -32,6 +33,7 @@ export async function getServerSideProps(context) {
       );
 
       const data = await res.json();
+      console.log(data);
       return {
         props: {
           user: JSON.stringify(userSession) || "null",
@@ -70,6 +72,30 @@ export default function Applications({ user, applicationsData }) {
 
   console.log(applicationsDataValues);
 
+  async function setApplicationStatus(
+    farmer_id,
+    application_id,
+    approve,
+    volunteer_id
+  ) {
+    try {
+      const res = await fetch(`/api/approve`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          farmer_id,
+          application_id,
+          approve,
+          volunteer_id,
+        }),
+      });
+
+      const data = await res.json();
+    } catch (error) {}
+  }
+
   return (
     <>
       <Head>
@@ -87,64 +113,94 @@ export default function Applications({ user, applicationsData }) {
             <h2 id="projectTitle">My Applications</h2>
 
             <div className="my-applications">
-              {applicationsDataValues.applicationsData.length > 0 ? (
+              {applicationsDataValues.applicationsData &&
+              applicationsDataValues.applicationsData.length > 0 ? (
                 applicationsDataValues.applicationsData.map(
-                  (application, i) => (
-                    <Link
-                      passHref
-                      href={`/opportunity/${application._id}`}
-                      key={i}
-                      className="vol-application"
-                    >
-                      <img alt="Image" src="/Images/yo.PNG" className="" />
-
-                      <div>
-                        <h2 className="volunteer-title">{application.title}</h2>
-                        <div
-                          style={{ marginTop: -5 }}
-                          className="volunteer-rating"
+                  (application, i) => {
+                    if (application != null)
+                      return (
+                        <Link
+                          passHref
+                          href={`/opportunity/${application._id}`}
+                          key={i}
+                          className="vol-application"
                         >
-                          <span className="rating">
-                            {application.rating.score}
-                          </span>
-                          <img
-                            className="star"
-                            src="/Images/svgs/star.svg"
-                            alt="Star"
-                          />
-                          <span className="total-ratings">
-                            ({application.rating.total_reviews})
-                          </span>
-                        </div>
+                          <img alt="Image" src="/Images/yo.PNG" className="" />
 
-                        <div style={{ marginTop: 10 }}>
-                          <p className="date">
-                            Date:{" "}
-                            {new Date(
-                              applicationsDataValues.userApplicationsData[
-                                i
-                              ].date
-                            ).toLocaleDateString("en-GB")}
-                          </p>
-                        </div>
-                      </div>
+                          <div>
+                            <h2 className="volunteer-title">
+                              {application.title}
+                            </h2>
+                            <div
+                              style={{ marginTop: -5 }}
+                              className="volunteer-rating"
+                            >
+                              <span className="rating">
+                                {application.rating.score}
+                              </span>
+                              <img
+                                className="star"
+                                src="/Images/svgs/star.svg"
+                                alt="Star"
+                              />
+                              <span className="total-ratings">
+                                ({application.rating.total_reviews})
+                              </span>
+                            </div>
 
-                      <svg
-                        width="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M5 12H19M5 12L11 6M5 12L11 18"
-                          stroke="rgba(0,0,0,0.5)"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </Link>
-                  )
+                            <p
+                              style={{ margin: "7px 0" }}
+                              className="total-ratings"
+                            >
+                              Date:{" "}
+                              {new Date(
+                                applicationsDataValues.userApplicationsData[
+                                  i
+                                ].date
+                              ).toLocaleDateString("en-GB")}
+                            </p>
+
+                            <div
+                              className={
+                                applicationsDataValues.userApplicationsData[i]
+                                  .approved == 2
+                                  ? `approved`
+                                  : applicationsDataValues.userApplicationsData[
+                                      i
+                                    ].approved == 1
+                                  ? `declined`
+                                  : "pending"
+                              }
+                              style={{ marginTop: 13 }}
+                            >
+                              Status:{" "}
+                              {applicationsDataValues.userApplicationsData[i]
+                                .approved == 2
+                                ? `Approved`
+                                : applicationsDataValues.userApplicationsData[i]
+                                    .approved == 1
+                                ? `Declined`
+                                : `Pending`}
+                            </div>
+                          </div>
+
+                          <svg
+                            width="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M5 12H19M5 12L11 6M5 12L11 18"
+                              stroke="rgba(0,0,0,0.5)"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </Link>
+                      );
+                  }
                 )
               ) : (
                 <div>No applications found yet.</div>
@@ -155,36 +211,107 @@ export default function Applications({ user, applicationsData }) {
 
         {/* Farmer */}
         {data && data.role && data.role == "farmer" && (
-          <div style={{ margin: "95px 0px" }}>
-            <h2 style={{ margin: "0 20px 15px 20px" }} id="projectTitle">
-              My Requests
-            </h2>
+          <div style={{ margin: "105px 0px" }}>
+            <div
+              className="header-applications"
+              style={{ margin: "0 20px 15px 20px" }}
+            >
+              <h2 style={{ margin: 0 }} id="projectTitle">
+                My Requests
+              </h2>
+
+              <Link
+                style={{
+                  textDecoration: "none",
+                  color: "black",
+                  fontSize: "13px",
+                }}
+                href={"/opportunity/add"}
+              >
+                Add New Opportunity
+              </Link>
+            </div>
 
             <div className="requests-list">
-              <div className="request-item">
-                {/* SVG USER ICON */}
+              {applicationsDataValues.userApplicationsData &&
+              applicationsDataValues.userApplicationsData ? (
+                applicationsDataValues.userApplicationsData.map(
+                  (application, i) => (
+                    <div key={i} className="request-item">
+                      <div style={{ width: "100%" }}>
+                        <div>
+                          <h4 style={{ fontWeight: 500, margin: "8px 0" }}>
+                            {application.volunteer_username ?? "No Username"}
+                          </h4>
+                          <p className="date" style={{ marginBottom: "3px" }}>
+                            Date:{" "}
+                            {new Date(
+                              applicationsDataValues.userApplicationsData[
+                                i
+                              ].date
+                            ).toLocaleDateString("en-GB")}
+                          </p>
 
-                <div style={{ width: "100%" }}>
-                  <div>
-                    <h4 style={{ fontWeight: 500, margin: "8px 0" }}>
-                      User Name
-                    </h4>
-                    <p className="date" style={{ marginBottom: "3px" }}>
-                      Date: 02/03/2024
-                    </p>
+                          <p className="date" style={{ fontWeight: 500 }}>
+                            Application: {application.title}
+                          </p>
+                        </div>
 
-                    <p className="date" style={{ fontWeight: 500 }}>
-                      Application: Title Name
-                    </p>
-                  </div>
-
-                  <div className="req-buttons">
-                    <button className="decline">Decline</button>
-                    <button className="accept">Accept</button>
-                  </div>
-                </div>
-              </div>
+                        <div className="req-buttons">
+                          {application.approved == 0 ? (
+                            <>
+                              <button
+                                onClick={() => {
+                                  setApplicationStatus(
+                                    application.farmer_id,
+                                    application._id,
+                                    false,
+                                    application.volunteer_id
+                                  );
+                                }}
+                                className="decline"
+                              >
+                                Decline
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setApplicationStatus(
+                                    application.farmer_id,
+                                    application._id,
+                                    true,
+                                    application.volunteer_id
+                                  );
+                                }}
+                                className="accept"
+                              >
+                                Accept
+                              </button>
+                            </>
+                          ) : application.approved == 1 ? (
+                            <p className="declined">Status: Declined</p>
+                          ) : (
+                            application.approved == 2 && (
+                              <p className="approved">Status: Approved</p>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                )
+              ) : (
+                <div>No applications found yet.</div>
+              )}
             </div>
+          </div>
+        )}
+
+        {/* No User */}
+        {!data && (
+          <div style={{ margin: "95px 0px" }}>
+            <h2 style={{ margin: "0 20px 15px 20px" }} id="projectTitle">
+              You must be logged in to view this page.
+            </h2>
           </div>
         )}
 

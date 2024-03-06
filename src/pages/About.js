@@ -3,12 +3,10 @@ import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
 import { useState } from "react";
 import Link from "next/link";
-import styles from "../styles/About.module.css"; 
+import styles from '../styles/About.module.css'; 
 
 const About = () => {
     return (
-      
-
       <div className={styles.aboutContainer}>
         <div className={styles.heroSection}>
         <Header />
@@ -20,7 +18,7 @@ const About = () => {
               Join us </h2>
             <p className={styles.introText}>
              students, families, or solo adventurers
-             and plant seeds of change in Israel's rich soil. Dive into diverse agricultural projects and grow with us.
+             and plant seeds of change in Israel&apos;s rich soil. Dive into diverse agricultural projects and grow with us.
             </p>
             <h2 className={styles.whatIsTitle}>What is Voluntree?</h2>
             <p>Voluntree designed to seamlessly connect the vibrant agricultural sector with community volunteers. Our digital platform is a conduit for mutual growth, powered by innovative technology.</p>

@@ -39,15 +39,10 @@ const userSchema = new mongoose.Schema({
         trim: true,
       },
       approved: {
-<<<<<<< HEAD
-        type: Boolean,
-        required: false,
-        default: false,
-=======
+
         type: Number,
         required: false,
         default: 0, //0 - Pending, 1 - Declined, 2 - Approved
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
       },
       farmer_id: {
         type: String,
@@ -61,7 +56,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
-<<<<<<< HEAD
+
+      volunteer_username: {
+        type: String,
+        required: false,
+      },
     },
   ],
   favorites: [
@@ -91,34 +90,22 @@ const userSchema = new mongoose.Schema({
       opportunity_id: {
         type: String,
         required: true,
-=======
-      volunteer_username: {
-        type: String,
-        required: false,
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
+
       },
     },
   ],
 });
 
-<<<<<<< HEAD
-// // Authenticate input against database documents
-// UserSchema.statics.authenticate = function (email, password, callback) {
-//   User.findOne({ email: email }).exec(function (err, user) {
-//     if (err) {
-//       return callback(err);
-//     } else if (!user) {
-//       var err = new Error("User not found.");
-//       err.status = 401;
-//       return callback(err);
-//     }
-//     bcrypt.compare(password, user.password, function (err, result) {
-//       if (result === true) {
-//         return callback(null, user);
-//       } else {
-//         return callback(new Error
-=======
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
+      volunteer_username: {
+        type: String,
+        required: false,
+      },
+    },
+  ],
+});
+
+
+
 const User = mongoose.models.users || mongoose.model("users", userSchema);
 
 export default User;

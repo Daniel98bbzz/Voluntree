@@ -1,6 +1,6 @@
 import { connect } from "../../dbConfig/dbConfig";
-
 import userModal from "../../../models/userModel";
+import mongoose from "mongoose";
 
 connect();
 
@@ -8,7 +8,15 @@ export default async function POST(request, result) {
   try {
     const reqBody = request.body;
 
-    const { volunteer_id, farmer_id, title, opportunity_id } = reqBody;
+    const {
+      volunteer_id,
+      farmer_id,
+      title,
+      opportunity_id,
+      volunteer_username,
+    } = reqBody;
+
+    var objectId = new mongoose.Types.ObjectId();
 
     const volunteer = await userModal.updateOne(
       { _id: volunteer_id },
@@ -20,12 +28,12 @@ export default async function POST(request, result) {
             farmer_id,
             opportunity_id,
             volunteer_id,
+            approved: 0,
+            _id: objectId,
           },
-        }
+        },
       }
-      
     );
-    
 
     const farmer = await userModal.updateOne(
       { _id: farmer_id },
@@ -37,7 +45,9 @@ export default async function POST(request, result) {
             farmer_id,
             opportunity_id,
             volunteer_id,
-            approved: false,
+            approved: 0,
+            volunteer_username,
+            _id: objectId,
           },
         },
       }

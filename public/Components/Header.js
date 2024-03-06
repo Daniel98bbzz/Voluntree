@@ -1,15 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
-export default function Header() {
+
+export default function Header({ showBackButton = true }) {
   return (
     <header className="main-header">
-      <button className="return-icon">
-        <img
-          src="/Images/svgsInformation/arrow.svg"
-          className="return"
-          alt="return"
-        />
-      </button>
-
+      {showBackButton && (
+        <button className="return-icon">
+          <img
+            src="/Images/svgsInformation/arrow.svg"
+            className="return"
+            alt="return"
+          />
+        </button>
+      )}
       <img
         src="/Images/logo.PNG"
         alt="Voluntree Logo"
@@ -21,14 +23,6 @@ export default function Header() {
           className="notification"
           src="/Images/svgsInformation/notification.svg"
           alt="Notification"
-        />
-      </button>
-
-      <button className="chat-icon">
-        <img
-          className="chat"
-          src="/Images/svgsInformation/message5.svg"
-          alt="chat"
         />
       </button>
     </header>

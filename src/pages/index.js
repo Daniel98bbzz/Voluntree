@@ -2,10 +2,6 @@
 import Head from "next/head";
 import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
-<<<<<<< HEAD
-
-export default function Home() {
-=======
 import Link from "next/link";
 
 export async function getServerSideProps(context) {
@@ -44,7 +40,6 @@ export default function Home({ data }) {
   }
 
   console.log(opportunities);
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
   return (
     <>
       <Head>
@@ -55,13 +50,9 @@ export default function Home({ data }) {
       </Head>
 
       <main>
-        <Header />
+        <Header showBackButton = {false} />
 
-<<<<<<< HEAD
-        <div className="container">
-=======
         <div style={{ marginBottom: 70 }} className="container">
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
           <div className="rectangle">
             <p>More than volunteering</p>
             <p>Join us for meaningful volunteering</p>
@@ -69,23 +60,14 @@ export default function Home({ data }) {
               Experiences that connect a wide variety of populations to farmers
               who need help
             </p>
-<<<<<<< HEAD
-            <a href="#" className="button">
-              LEARN MORE
-            </a>
-          </div>
-
-          <h2 className="selection-heading">SELECTION BY REGION</h2>
-=======
             <Link href="/About" legacyBehavior>
-  <a className="button">LEARN MORE</a>
-</Link>
+              <a className="button">Learn MORE</a>
+            </Link>
           </div>
 
           <h2 style={{ marginTop: 40 }} className="selection-heading">
             SELECTION BY REGION
           </h2>
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
           <div className="region-container">
             <div className="region">
               CENTRAL
@@ -101,31 +83,6 @@ export default function Home({ data }) {
             </div>
           </div>
 
-<<<<<<< HEAD
-          <h2 className="next-to-you">NEXT TO YOU</h2>
-          <div className="farm-container">
-            <a href="farm1-page.html" className="farm-link">
-              <div className="farm">
-                <img src="/Images/a.jpeg" alt="Farm 1" />
-                <p>משק רצון ממושב עזריאל</p>
-
-                <div className="rating">
-                  <input type="radio" id="star1" name="rating1" value="1" />
-                  <label htmlFor="star1">&#9733;</label>
-                  <input type="radio" id="star2" name="rating1" value="2" />
-                  <label htmlFor="star2">&#9733;</label>
-                  <input type="radio" id="star3" name="rating1" value="3" />
-                  <label htmlFor="star3">&#9733;</label>
-                  <input type="radio" id="star4" name="rating1" value="4" />
-                  <label htmlFor="star4">&#9733;</label>
-                  <input type="radio" id="star5" name="rating1" value="5" />
-                  <label htmlFor="star5">&#9733;</label>
-                </div>
-              </div>
-            </a>
-
-            <a href="farm2-page.html" className="farm-link">
-=======
           <h2 style={{ marginTop: 40 }} className="next-to-you">
             NEXT TO YOU
           </h2>
@@ -192,7 +149,6 @@ export default function Home({ data }) {
               ))}
 
             {/* <a href="farm2-page.html" className="farm-link">
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
               <div className="farm">
                 <img src="/Images/R.jpeg" alt="Farm 2" />
                 <p>משק חקלאי במושב רוויה</p>
@@ -230,37 +186,6 @@ export default function Home({ data }) {
                   <label htmlFor="star15">&#9733;</label>
                 </div>
               </div>
-<<<<<<< HEAD
-            </a>
-          </div>
-
-          <h2 className="all-opportunities">ALL THE OPPORTUNITIES</h2>
-          <div className="opportunity-container">
-            <div className="opportunity">
-              <img src="/Images/PI.jpg" alt="Opportunity 1" />
-              <div className="opportunity-text">
-                <p className="title">
-                  South Activities in the <br />
-                  Pineapple Greenhouse
-                </p>
-                <p className="description">
-                  Dear volunteers, I am Eitan <br />
-                  Second generation <br />
-                  of farmers in the south
-                </p>
-              </div>
-            </div>
-
-            <div className="opportunity">
-              <img src="opportunity2.jpg" alt="Opportunity 2" />
-              <p>Opportunity 2</p>
-            </div>
-
-            <div className="opportunity">
-              <img src="opportunity3.jpg" alt="Opportunity 3" />
-              <p>Opportunity 3</p>
-            </div>
-=======
             </a> */}
           </div>
 
@@ -287,7 +212,6 @@ export default function Home({ data }) {
                   </div>
                 </Link>
               ))}
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
           </div>
         </div>
       </main>
