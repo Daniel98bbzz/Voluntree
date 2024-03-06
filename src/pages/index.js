@@ -2,8 +2,44 @@
 import Head from "next/head";
 import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
+import Link from "next/link";
 
-export default function Home() {
+export async function getServerSideProps(context) {
+  const { req } = context;
+  const protocol = req.headers.referer
+    ? req.headers.referer.split(":")[0]
+    : "http";
+  const host = req.headers.host;
+
+  const hostUrl = `${protocol}://${host}`;
+  try {
+    const res = await fetch(`${hostUrl}/api/opportunities`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const opportunities = await res.json();
+
+    return {
+      props: { data: JSON.stringify(opportunities) },
+    };
+  } catch (error) {
+    return {
+      props: { data: "Error" },
+    };
+  }
+}
+
+export default function Home({ data }) {
+  let opportunities;
+  try {
+    opportunities = JSON.parse(data);
+  } catch (error) {
+    opportunities = "Error";
+  }
+
+  console.log(opportunities);
   return (
     <>
       <Head>
@@ -16,7 +52,7 @@ export default function Home() {
       <main>
         <Header />
 
-        <div className="container">
+        <div style={{ marginBottom: 70 }} className="container">
           <div className="rectangle">
             <p>More than volunteering</p>
             <p>Join us for meaningful volunteering</p>
@@ -24,12 +60,14 @@ export default function Home() {
               Experiences that connect a wide variety of populations to farmers
               who need help
             </p>
-            <a href="#" className="button">
-              LEARN MORE
-            </a>
+            <Link href="/About" legacyBehavior>
+  <a className="button">LEARN MORE</a>
+</Link>
           </div>
 
-          <h2 className="selection-heading">SELECTION BY REGION</h2>
+          <h2 style={{ marginTop: 40 }} className="selection-heading">
+            SELECTION BY REGION
+          </h2>
           <div className="region-container">
             <div className="region">
               CENTRAL
@@ -45,29 +83,72 @@ export default function Home() {
             </div>
           </div>
 
-          <h2 className="next-to-you">NEXT TO YOU</h2>
+          <h2 style={{ marginTop: 40 }} className="next-to-you">
+            NEXT TO YOU
+          </h2>
           <div className="farm-container">
-            <a href="farm1-page.html" className="farm-link">
-              <div className="farm">
-                <img src="/Images/a.jpeg" alt="Farm 1" />
-                <p>משק רצון ממושב עזריאל</p>
+            {opportunities.data &&
+              opportunities.data.map((opportunity, i) => (
+                <Link
+                  key={i}
+                  href={`/opportunity/${opportunity._id}`}
+                  passHref
+                  className="farm-link"
+                >
+                  <div className="farm">
+                    <img
+                      src={`/Images/${opportunity.header_image}`}
+                      alt="Farm 1"
+                    />
+                    <p>{opportunity.title}</p>
 
-                <div className="rating">
-                  <input type="radio" id="star1" name="rating1" value="1" />
-                  <label htmlFor="star1">&#9733;</label>
-                  <input type="radio" id="star2" name="rating1" value="2" />
-                  <label htmlFor="star2">&#9733;</label>
-                  <input type="radio" id="star3" name="rating1" value="3" />
-                  <label htmlFor="star3">&#9733;</label>
-                  <input type="radio" id="star4" name="rating1" value="4" />
-                  <label htmlFor="star4">&#9733;</label>
-                  <input type="radio" id="star5" name="rating1" value="5" />
-                  <label htmlFor="star5">&#9733;</label>
-                </div>
-              </div>
-            </a>
+                    <div className="rating">
+                      {Array.from({
+                        length: Math.floor(opportunity.rating.score),
+                      }).map((star, i) => (
+                        <>
+                          <input
+                            key={i}
+                            type="radio"
+                            id={`star${i + 1}`}
+                            name={`rating${i + 1}`}
+                            value={i}
+                          />
+                          <label
+                            key={i}
+                            className="yellow"
+                            htmlFor={`star${i + 1}`}
+                          >
+                            &#9733;
+                          </label>
+                        </>
+                      ))}
+                      {Array.from({
+                        length: 5 - Math.floor(opportunity.rating.score),
+                      }).map((star, i) => (
+                        <>
+                          <input
+                            key={i}
+                            type="radio"
+                            id={`star${i + 1}`}
+                            name={`rating${i + 1}`}
+                            value={i}
+                          />
+                          <label
+                            key={i}
+                            className="gray"
+                            htmlFor={`star${i + 1}`}
+                          >
+                            &#9733;
+                          </label>
+                        </>
+                      ))}
+                    </div>
+                  </div>
+                </Link>
+              ))}
 
-            <a href="farm2-page.html" className="farm-link">
+            {/* <a href="farm2-page.html" className="farm-link">
               <div className="farm">
                 <img src="/Images/R.jpeg" alt="Farm 2" />
                 <p>משק חקלאי במושב רוויה</p>
@@ -105,35 +186,32 @@ export default function Home() {
                   <label htmlFor="star15">&#9733;</label>
                 </div>
               </div>
-            </a>
+            </a> */}
           </div>
 
-          <h2 className="all-opportunities">ALL THE OPPORTUNITIES</h2>
+          <h2 style={{ marginTop: 40 }} className="all-opportunities">
+            ALL THE OPPORTUNITIES
+          </h2>
           <div className="opportunity-container">
-            <div className="opportunity">
-              <img src="/Images/PI.jpg" alt="Opportunity 1" />
-              <div className="opportunity-text">
-                <p className="title">
-                  South Activities in the <br />
-                  Pineapple Greenhouse
-                </p>
-                <p className="description">
-                  Dear volunteers, I am Eitan <br />
-                  Second generation <br />
-                  of farmers in the south
-                </p>
-              </div>
-            </div>
-
-            <div className="opportunity">
-              <img src="opportunity2.jpg" alt="Opportunity 2" />
-              <p>Opportunity 2</p>
-            </div>
-
-            <div className="opportunity">
-              <img src="opportunity3.jpg" alt="Opportunity 3" />
-              <p>Opportunity 3</p>
-            </div>
+            {opportunities.data &&
+              opportunities.data.map((opportunity, i) => (
+                <Link
+                  style={{ textDecoration: "none" }}
+                  key={i}
+                  href={`/opportunity/${opportunity._id}`}
+                  className="opportunity"
+                  passHref
+                >
+                  <img
+                    src={`/Images/${opportunity.header_image}`}
+                    alt="Opportunity"
+                  />
+                  <div className="opportunity-text">
+                    <p className="title">{opportunity.title}</p>
+                    <p className="description">{opportunity.description}</p>
+                  </div>
+                </Link>
+              ))}
           </div>
         </div>
       </main>
