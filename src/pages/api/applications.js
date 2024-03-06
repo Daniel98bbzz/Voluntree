@@ -1,5 +1,4 @@
 import { connect } from "../../dbConfig/dbConfig";
-
 import userModal from "../../../models/userModel";
 import opportunityModel from "../../../models/opportunityModel";
 

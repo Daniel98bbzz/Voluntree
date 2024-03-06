@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+
 export default function Header({ showBackButton = true }) {
   return (
     <header className="main-header">
@@ -11,7 +12,6 @@ export default function Header({ showBackButton = true }) {
           />
         </button>
       )}
-      
       <img
         src="/Images/logo.PNG"
         alt="Voluntree Logo"
