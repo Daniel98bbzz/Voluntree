@@ -10,6 +10,10 @@ import mongoose from "mongoose";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
+
+
+
+
 export async function getServerSideProps() {
   try {
     let client = await mongoose.connect(process.env.DATABASE_URL);
@@ -24,6 +28,7 @@ export async function getServerSideProps() {
     };
   }
 }
+
 
 export default function Home({ data }) {
   const opportunities = data != "Error" ? JSON.parse(data) : "";
@@ -62,6 +67,10 @@ export default function Home({ data }) {
 
   const FilterModal = useRef(null);
 
+
+
+
+  
   return (
     <>
       <Head>
@@ -140,7 +149,7 @@ export default function Home({ data }) {
                 <article key={i} className="volunteer-card">
                   <header className="volunteer-card-header">
                     <img
-                      src={opportunity.header_image} //{`/Images/${opportunity.header_image}`}
+                      src={opportunity.header_image}
                       alt="Beach with turtle"
                       className="volunteer-header-image"
                     />
