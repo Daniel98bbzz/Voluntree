@@ -19,10 +19,6 @@
   "devDependencies": {
     "@types/node": "20.11.24",
     "@types/react": "18.2.61",
-<<<<<<< HEAD
-=======
-    "cross-env": "^7.0.3",
->>>>>>> d04a06fe193db3ea6c8dd665e264f1bab460ebbe
     "eslint": "^8",
     "eslint-config-next": "14.1.1"
   }
