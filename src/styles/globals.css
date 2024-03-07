@@ -54,13 +54,14 @@ body {
   margin-top: 8px;
 }
 
-.notifications-icon,
+notifications-icon,
 .chat-icon {
   background: none;
   border: none;
   /* Adjust the width to your liking */
   margin: 0 10px;
 }
+
 /* 
 .notifications-icon {
   position: relative;
@@ -70,13 +71,22 @@ body {
   margin-bottom: 8px;
 } */
 
-.notifications-icon {
-  /* Remove position and right properties */
-  margin-bottom: 8px;
-  width: 47px;
-  /* Adjust the margin to make sure the icon has space around it */
-  margin-left: auto; /* This will push the notification icon to the right */
+.notifications-icon,
+.chat-icon {
+  background: none;
+  border: none;
+  /* Adjust the width to your liking */
+  margin: 0 10px;
 }
+
+.notifications-icon {
+  position: relative;
+  right: 10px;
+  top: 1px;
+  width: 47px;
+  margin-bottom: 8px;
+}
+
 .chat-icon {
   position: relative;
   right: 25px;
@@ -106,6 +116,44 @@ body {
   margin-right: 0;
   /* Remove right margin from the last icon */
 }
+
+.notifications-dropdown {
+  position: absolute;
+  top: 100%;
+  /* Align the top of the dropdown with the bottom of the button */
+  right: 0;
+  /* Align the dropdown to the right side of the header */
+  width: 250px;
+  /* Set a fixed width for the dropdown */
+  background-color: white;
+  /* Choose a background color that fits your theme */
+  border: 1px solid #ddd;
+  /* Optional border */
+  border-radius: 4px;
+  /* Optional border radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Optional shadow for better visibility */
+  z-index: 1000;
+  /* Make sure the dropdown is above other content */
+}
+
+/* Style for individual notification items */
+.notifications-dropdown li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+/* Style for the last item without a border */
+.notifications-dropdown li:last-child {
+  border-bottom: none;
+}
+
+/* Hover effect for notification items */
+.notifications-dropdown li:hover {
+  background-color: #f9f9f9;
+}
+
 
 .project-card {
   text-align: left;
@@ -300,6 +348,31 @@ h2 {
 }
 
 @media (max-width: 768px) {
+
+  .notifications-dropdown {
+    /* Make the dropdown full width on mobile for better visibility */
+    width: calc(100% - 20px);
+    /* Subtract some px for padding */
+    right: 10px;
+    /* Adjust right position to align with the width */
+    left: 0px;
+    /* Add left position to maintain padding from the screen edges */
+    box-sizing: border-box;
+    /* Include padding and border in the element's width */
+  }
+
+  .notifications-dropdown li {
+    /* Increase padding for larger touch targets on mobile */
+    padding: 10px;
+  }
+
+  .return-icon,
+  .notifications-icon {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+
   .project-card {
     width: 90%;
   }
@@ -440,6 +513,7 @@ h2 {
   /* Color for empty star */
   cursor: pointer;
 }
+
 .rating .yellow {
   font-size: 24px;
   /* Adjust the size of the star icons */
@@ -448,7 +522,7 @@ h2 {
   cursor: pointer;
 }
 
-.rating input[type="radio"]:checked ~ label {
+.rating input[type="radio"]:checked~label {
   color: gold;
   /* Color for filled star */
 }
@@ -696,6 +770,7 @@ h2 {
   padding: 5px 10px;
   font-size: 0.75rem;
 }
+
 .badge2 {
   background-color: #ffa500;
   /* Example color */
@@ -789,7 +864,7 @@ h2 {
   color: rgb(0, 0, 0);
   font-size: 0.8125rem;
   text-align: center;
-  margin-left: 50px;
+  /* margin-left: 50px; */
 }
 
 .service {
@@ -1031,6 +1106,7 @@ h2 {
 }
 
 @media (max-width: 768px) {
+
   .notifications-icon,
   .chat-icon {
     margin-right: 5px;
@@ -1114,6 +1190,7 @@ h2 {
   color: white;
   cursor: pointer;
 }
+
 .container-login form input[type="submit"]:hover {
   background: #4cae4c;
 }
@@ -1124,6 +1201,7 @@ h2 {
   padding: 20px;
   text-align: center;
 }
+
 .container-register form input[type="email"],
 .container-register form input[type="text"],
 .container-register form input[type="password"] {
@@ -1133,6 +1211,7 @@ h2 {
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
 .container-register form input[type="submit"] {
   width: 100%;
   padding: 10px;
@@ -1142,6 +1221,7 @@ h2 {
   color: white;
   cursor: pointer;
 }
+
 .container-register form input[type="submit"]:hover {
   background: #286090;
 }

@@ -139,7 +139,7 @@ export default function Home({ data }) {
                 <article key={i} className="volunteer-card">
                   <header className="volunteer-card-header">
                     <img
-                      src={`/Images/${opportunity.header_image}`}
+                      src={opportunity.header_image}
                       alt="Beach with turtle"
                       className="volunteer-header-image"
                     />
@@ -164,10 +164,10 @@ export default function Home({ data }) {
                       </span>
                     </div>
                     <div className="volunteer-info">
-                      <span className="volunteer-price">
+                      {/* <span className="volunteer-price">
                         {opportunity.cost.price_per_week}
                         {opportunity.cost.currency} per week
-                      </span>
+                      </span> */}
                       <span className="volunteer-duration">
                         {opportunity.cost.duration_weeks.min} -{" "}
                         {opportunity.cost.duration_weeks.max} weeks
@@ -182,14 +182,14 @@ export default function Home({ data }) {
                   </div>
                   <div className="volunteer-footer">
                     <div className="volunteer-services">
-                      {opportunity.services.map((s, index) => (
+                    {opportunity.services.slice(-3).map((service, index) => (
                         <div key={index} className="service">
                           <img
                             className="service-icon"
-                            src={`/Images/${s.icon}`}
-                            alt="Airport Taxi Icon"
+                            src={`/Images/svgs/servicesSvgs/${service.name}.svg`}
+                            alt={`${service.name} Icon`}
                           />
-                          <span>{s.name}</span>
+                          <span>{service.name}</span>
                         </div>
                       ))}
                     </div>

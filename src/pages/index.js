@@ -4,6 +4,7 @@ import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
 import Link from "next/link";
 
+
 export async function getServerSideProps(context) {
   const { req } = context;
   const protocol = req.headers.referer
@@ -97,7 +98,7 @@ export default function Home({ data }) {
                 >
                   <div className="farm">
                     <img
-                      src={`/Images/${opportunity.header_image}`}
+                      src={opportunity.header_image}
                       alt="Farm 1"
                     />
                     <p>{opportunity.title}</p>
@@ -203,7 +204,7 @@ export default function Home({ data }) {
                   passHref
                 >
                   <img
-                    src={`/Images/${opportunity.header_image}`}
+                    src={opportunity.header_image}
                     alt="Opportunity"
                   />
                   <div className="opportunity-text">
