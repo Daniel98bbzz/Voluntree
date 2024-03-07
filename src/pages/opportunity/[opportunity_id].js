@@ -94,7 +94,7 @@ export default function OpportunityDetails({ data, user }) {
         <Header />
 
         <img
-          src={`/Images/${opportunity.header_image}`}
+          src={opportunity.header_image}
           alt="farmer image"
           className="project-image"
         />

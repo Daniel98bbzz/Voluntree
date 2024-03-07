@@ -8,7 +8,7 @@ db_user = 'voluntreeUser'
 db_pass = '1234'  # Make sure to use your actual password in a secure way
 db_host = 'cluster0.ghibpdj.mongodb.net'
 db_name = 'volunteeringOpportunitiesDB'  # Replace with the name of your database
-collection_name = 'opportunitykaki'  # Replace with the name of your collection
+collection_name = 'opportunities'  # Replace with the name of your collection
 
 # Construct the MongoDB Atlas connection string
 conn_string = f'mongodb+srv://{db_user}:{db_pass}@{db_host}/{db_name}?retryWrites=true&w=majority'
