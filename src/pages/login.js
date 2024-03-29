@@ -3,8 +3,41 @@ import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import jwt from "jsonwebtoken";
 
-export default function Login() {
+export async function getServerSideProps(context) {
+  const { req } = context;
+
+  try {
+    const jwtSession = req.cookies.jwtSession;
+    const userSession = jwt.decode(jwtSession);
+
+    const userData = JSON.stringify(userSession);
+
+    if (userData != "null") {
+      return {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        },
+      };
+    }
+    return {
+      props: {
+        user: JSON.stringify(userSession) || "null",
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        user: "null",
+      },
+    };
+  }
+}
+
+export default function Login({ user }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -17,11 +50,32 @@ export default function Login() {
       [name]: value,
     });
   };
+  const route = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add logic to submit the form data to the login endpoint
-    console.log(formData);
+    const userLogin = async () => {
+      const res = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const responseData = await res.json();
+        console.log(responseData);
+      }
+
+      const responseData = await res.json();
+
+      if (responseData.message) {
+        route.push("/");
+      }
+    };
+
+    if (formData.email && formData.password) userLogin();
   };
 
   return (
