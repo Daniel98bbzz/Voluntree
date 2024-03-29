@@ -9,30 +9,89 @@ import opportunityModel from "../../models/opportunityModel";
 import mongoose from "mongoose";
 import Link from "next/link";
 import { useRef, useState } from "react";
+import jwt from "jsonwebtoken";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 
+export async function getServerSideProps(context) {
+  const { req } = context;
 
+  const protocol = req.headers.referer
+    ? req.headers.referer.split(":")[0]
+    : "http";
+  const host = req.headers.host;
 
+  const hostUrl = `${protocol}://${host}`;
 
-
-export async function getServerSideProps() {
   try {
     let client = await mongoose.connect(process.env.DATABASE_URL);
     const opportunities = await opportunityModel.find();
 
-    return {
-      props: { data: JSON.stringify(opportunities) },
-    };
+    const jwtSession = req.cookies.jwtSession;
+    const userSession = jwt.decode(jwtSession);
+
+    const userData = JSON.stringify(userSession);
+
+    if (userData.length > 10) {
+      try {
+        const res = await fetch(
+          `${hostUrl}/api/favorites?user_id=${userSession.id}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        const favsData = await res.json();
+        return {
+          props: {
+            data: JSON.stringify(opportunities),
+            user: JSON.stringify(userSession) || "null",
+            favoritesData: JSON.stringify(favsData) || [],
+          },
+        };
+      } catch (error) {
+        return {
+          props: {
+            data: JSON.stringify(opportunities),
+            user: JSON.stringify(userSession) || "null",
+            favoritesData: [],
+          },
+        };
+      }
+    } else {
+      return {
+        props: {
+          data: JSON.stringify(opportunities),
+          user: JSON.stringify(userSession) || "null",
+          favoritesData: [],
+        },
+      };
+    }
   } catch (error) {
     return {
-      props: { data: "Error" },
+      props: { data: "Error", user: "null", favoritesData: [] },
     };
   }
 }
 
-
-export default function Home({ data }) {
+export default function Home({ data, user, favoritesData }) {
   const opportunities = data != "Error" ? JSON.parse(data) : "";
-  console.log(opportunities);
+
+  let userData;
+  let favorites;
+
+  const { query } = useRouter();
+  const region = query.region ? decodeURIComponent(query.region) : "";
+
+  try {
+    userData = JSON.parse(user);
+    favorites = JSON.parse(favoritesData).userFavoritesData;
+  } catch (error) {}
+
+  const [userFavorites, setUserFavorites] = useState(favorites || []);
 
   const [openFilter, setOpenFilter] = useState(false);
   const [filter, setFilter] = useState({
@@ -47,6 +106,11 @@ export default function Home({ data }) {
         opp.title
           .toLocaleLowerCase()
           .includes(filter.search.toLocaleLowerCase())
+      )
+      .filter((opp) =>
+        opp.location_details.address
+          .toLocaleLowerCase()
+          .includes(region.toLocaleLowerCase())
       )
       .sort((a, b) => {
         if (filter.sort != 3) return 0;
@@ -67,10 +131,64 @@ export default function Home({ data }) {
 
   const FilterModal = useRef(null);
 
+  async function addFavoriteOpportunity(fd) {
+    try {
+      const res = await fetch("/api/favorite", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(fd),
+      });
+      if (!res.ok) {
+        throw new Error();
+      }
+      const responseData = await res.json();
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
+  function addFavoriteOpportunityButton(fd) {
+    toast.promise(addFavoriteOpportunity(fd), {
+      loading: "Loading...",
+      success: () => {
+        return "Saved Successfully";
+      },
+      error: "Error, Try Again",
+    });
+  }
 
+  //
+  async function removeFavoriteOpportunity(fd) {
+    try {
+      const res = await fetch("/api/favorite", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(fd),
+      });
 
-  
+      if (!res.ok) {
+        throw new Error();
+      }
+
+      const responseData = await res.json();
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  function removeFavoriteOpportunityButton(fd) {
+    toast.promise(removeFavoriteOpportunity(fd), {
+      loading: "Loading...",
+      success: () => {
+        return "Removed Successfully";
+      },
+      error: "Error, Try Again",
+    });
+  }
+
   return (
     <>
       <Head>
@@ -137,23 +255,66 @@ export default function Home({ data }) {
           {filteredOpportunities && filteredOpportunities.length > 0 ? (
             filteredOpportunities.map((opportunity, i) => {
               const totalRatings = opportunity.overview.reviews.length;
-              const averageRating =
+              const sumRatings = opportunity.overview.reviews.reduce(
+                (sum, review) => {
+                  return sum + parseFloat(review.rating);
+                },
+                0
+              );
+
+              const avgRatings =
                 totalRatings > 0
-                  ? opportunity.overview.reviews.reduce(
-                      (sum, review) => sum + review.rating,
-                      0
-                    ) / totalRatings
-                  : 0;
+                  ? (sumRatings / totalRatings).toFixed(1)
+                  : "N/A";
+
+              const isFavorite = userFavorites.some(
+                (favorite) => favorite.opportunity_id === opportunity._id
+              );
 
               return (
                 <article key={i} className="volunteer-card">
                   <header className="volunteer-card-header">
                     <img
-                      src={opportunity.header_image}
+                      src={getImageSrc(opportunity.header_image)}
                       alt="Beach with turtle"
                       className="volunteer-header-image"
                     />
-                    <button className="heart-button">♥</button>
+                    <button
+                      onClick={() => {
+                        if (isFavorite) {
+                          const updatedFavorites = userFavorites.filter(
+                            (favorite) =>
+                              favorite.opportunity_id !== opportunity._id
+                          );
+                          setUserFavorites(updatedFavorites);
+
+                          const fd = {
+                            volunteer_id: userData.id,
+                            opportunity_id: opportunity._id,
+                          };
+
+                          removeFavoriteOpportunityButton(fd);
+                        } else {
+                          setUserFavorites([
+                            ...userFavorites,
+                            { opportunity_id: opportunity._id },
+                          ]);
+
+                          const fd = {
+                            volunteer_id: userData.id,
+                            title: opportunity.title,
+                            opportunity_id: opportunity._id,
+                          };
+
+                          addFavoriteOpportunityButton(fd);
+                        }
+                      }}
+                      className={
+                        isFavorite ? "heart-button-fill" : "heart-button"
+                      }
+                    >
+                      ♥
+                    </button>
                     {opportunity.high_demand && (
                       <div className="badge high-demand">In High Demand</div>
                     )}
@@ -163,15 +324,13 @@ export default function Home({ data }) {
                   <div className="volunteer-content">
                     <h2 className="volunteer-title">{opportunity.title}</h2>
                     <div className="volunteer-rating">
-                      <span className="rating">{opportunity.rating.score}</span>
+                      <span className="rating">{avgRatings}</span>
                       <img
                         className="star"
                         src="/Images/svgs/star.svg"
                         alt="Star"
                       />
-                      <span className="total-ratings">
-                        ({opportunity.overview.reviews.length})
-                      </span>
+                      <span className="total-ratings">({totalRatings})</span>
                     </div>
                     <div className="volunteer-info">
                       {/* <span className="volunteer-price">
@@ -219,6 +378,23 @@ export default function Home({ data }) {
 
           {data == "Error" && (
             <div style={{ marginTop: 40, fontSize: 20 }}>No results found.</div>
+          )}
+
+          {region.length > 1 && (
+            <Link
+              passHref
+              className="submit-rate-button"
+              href={"/opportunites"}
+              style={{
+                marginTop: 40,
+                marginBottom: 20,
+                width: "fit-content",
+                fontSize: 14,
+                textDecoration: "none",
+              }}
+            >
+              Reset Location Filter
+            </Link>
           )}
         </div>
       </main>
@@ -303,7 +479,16 @@ export default function Home({ data }) {
           </div>
         </div>
       )}
-      <Footer />
+      <Footer volunteer={userData && userData.role == "volunteer"} />
     </>
   );
+}
+
+function getImageSrc(headerImage) {
+  // Check if headerImage starts with 'http://' or 'https://'
+  if (/^https?:\/\//.test(headerImage)) {
+    return headerImage;
+  } else {
+    return `/Images/${headerImage}`;
+  }
 }

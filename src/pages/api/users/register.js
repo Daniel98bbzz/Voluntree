@@ -10,7 +10,7 @@ export default async function POST(request, result) {
   try {
     const reqBody = request.body;
     console.log(reqBody);
-    const { username, email, password, role } = reqBody;
+    const { username, email, password, role, id } = reqBody;
 
     const user = await userModal.findOne({ email });
 
@@ -25,6 +25,7 @@ export default async function POST(request, result) {
       email,
       password: hashedPassword,
       role,
+      u_id: id,
       applications: [],
     });
     const savedUser = await newUser.save();

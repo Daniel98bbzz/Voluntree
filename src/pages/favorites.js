@@ -4,6 +4,7 @@ import Header from "../../public/Components/Header";
 import Footer from "../../public/Components/Footer";
 import jwt from "jsonwebtoken";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export async function getServerSideProps(context) {
   const { req } = context;
@@ -13,7 +14,7 @@ export async function getServerSideProps(context) {
   const host = req.headers.host;
 
   const hostUrl = `${protocol}://${host}`;
-  console.log(hostUrl);
+
   try {
     const jwtSession = req.cookies.jwtSession;
     const userSession = jwt.decode(jwtSession);
@@ -22,7 +23,7 @@ export async function getServerSideProps(context) {
 
     try {
       const res = await fetch(
-        `${hostUrl}/api/favorites?user_id=${userData.id}`,
+        `${hostUrl}/api/favorites?user_id=${userSession.id}`,
         {
           method: "GET",
           headers: {
@@ -32,6 +33,7 @@ export async function getServerSideProps(context) {
       );
 
       const data = await res.json();
+
       return {
         props: {
           user: JSON.stringify(userSession) || "null",
@@ -43,12 +45,14 @@ export async function getServerSideProps(context) {
     return {
       props: {
         user: JSON.stringify(userSession) || "null",
+        favoritesData: [],
       },
     };
   } catch (error) {
     return {
       props: {
         user: "null",
+        favoritesData: [],
       },
     };
   }
@@ -63,12 +67,46 @@ export default function Favorites({ user, favoritesData }) {
   }
 
   try {
-    favoritesDataValues = JSON.parse(favoritesData);
+    if (favoritesData.error) {
+      favoritesDataValues = [];
+    } else {
+      favoritesDataValues = JSON.parse(favoritesData);
+    }
   } catch (error) {
     favoritesDataValues = [];
   }
 
-  console.log(favoritesDataValues);
+  async function removeFavoriteOpportunity() {
+    const favoriteData = {
+      volunteer_id: data.id,
+      opportunity_id: opportunity._id,
+    };
+    try {
+      const res = await fetch("/api/favorite", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(favoriteData),
+      });
+      if (!res.ok) {
+        throw new Error();
+      }
+      const responseData = await res.json();
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  function removeFavoriteOpportunityButton() {
+    toast.promise(removeFavoriteOpportunity(), {
+      loading: "Loading...",
+      success: () => {
+        return "Removed Successfully";
+      },
+      error: "Error, Try Again",
+    });
+  }
 
   return (
     <>
@@ -87,16 +125,34 @@ export default function Favorites({ user, favoritesData }) {
             <h2 id="projectTitle">My Favorites</h2>
 
             <div className="my-applications">
-              {favoritesDataValues.favoritesData.length > 0 ? (
-                favoritesDataValues.favoritesData.map(
-                  (favorite, i) => (
+              {favoritesDataValues.favoritesData &&
+              favoritesDataValues.favoritesData.length > 0 ? (
+                favoritesDataValues.favoritesData.map((favorite, i) => {
+                  const totalRatings = favorite.overview.reviews.length;
+                  const sumRatings = favorite.overview.reviews.reduce(
+                    (sum, review) => {
+                      return sum + parseFloat(review.rating);
+                    },
+                    0
+                  );
+
+                  const avgRatings =
+                    totalRatings > 0
+                      ? (sumRatings / totalRatings).toFixed(1)
+                      : "N/A";
+
+                  return (
                     <Link
                       passHref
                       href={`/opportunity/${favorite._id}`}
                       key={i}
                       className="vol-application"
                     >
-                      <img alt="Image" src="/Images/yo.PNG" className="" />
+                      <img
+                        alt="Image"
+                        src={getImageSrc(favorite.header_image)}
+                        className=""
+                      />
 
                       <div>
                         <h2 className="volunteer-title">{favorite.title}</h2>
@@ -104,16 +160,14 @@ export default function Favorites({ user, favoritesData }) {
                           style={{ marginTop: -5 }}
                           className="volunteer-rating"
                         >
-                          <span className="rating">
-                            {favorite.rating.score}
-                          </span>
+                          <span className="rating">{avgRatings}</span>
                           <img
                             className="star"
                             src="/Images/svgs/star.svg"
                             alt="Star"
                           />
                           <span className="total-ratings">
-                            ({favorite.rating.total_reviews})
+                            ({totalRatings})
                           </span>
                         </div>
 
@@ -121,9 +175,7 @@ export default function Favorites({ user, favoritesData }) {
                           <p className="date">
                             Date:{" "}
                             {new Date(
-                              favoritesDataValues.userFavoritesData[
-                                i
-                              ].date
+                              favoritesDataValues.userFavoritesData[i].date
                             ).toLocaleDateString("en-GB")}
                           </p>
                         </div>
@@ -144,8 +196,8 @@ export default function Favorites({ user, favoritesData }) {
                         />
                       </svg>
                     </Link>
-                  )
-                )
+                  );
+                })
               ) : (
                 <div>No favorites found yet.</div>
               )}
@@ -194,147 +246,11 @@ export default function Favorites({ user, favoritesData }) {
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import Head from "next/head";
-// import Header from "../../public/Components/Header";
-// import Footer from "../../public/Components/Footer";
-// import jwt from "jsonwebtoken";
-// import Link from "next/link";
-
-
-// export async function getServerSideProps(context) {
-//     const { req } = context;
-//     const protocol = req.headers.referer
-//       ? req.headers.referer.split(":")[0]
-//       : "http";
-//     const host = req.headers.host;
-  
-//     const hostUrl = `${protocol}://${host}`;
-//     console.log(hostUrl);
-//     try {
-//       const jwtSession = req.cookies.jwtSession;
-//       const userSession = jwt.decode(jwtSession);
-  
-//       const userData = JSON.parse(JSON.stringify(userSession));
-  
-//       // Fetch opportunities data
-//       const opportunitiesRes = await fetch(`${hostUrl}/api/opportunities`, {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       });
-  
-//       const opportunitiesData = await opportunitiesRes.json();
-  
-//       // Fetch user's favorite opportunities
-//       const favoritesRes = await fetch(
-//         `${hostUrl}/api/favorites?user_id=${userData.id}`,
-//         {
-//           method: "GET",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//         }
-//       );
-//       const favoritesData = await favoritesRes.json();
-
-//       return {
-//         props: {
-//           user: JSON.stringify(userSession) || "null",
-//           opportunitiesData: JSON.stringify(opportunitiesData) || [],
-//           favoritesData: JSON.stringify(favoritesData) || [],
-//         },
-//       };
-//     } catch (error) {
-//       return {
-//         props: {
-//           user: "null",
-//         },
-//       };
-//     }
-//   }
-  
-  
-//   export default function Favorites({ user, favoritesData }) {
-//     let userData;
-//     let favorites;
-  
-//     if (user != "null") {
-//       userData = JSON.parse(user);
-//     }
-  
-//     try {
-//       favorites = JSON.parse(favoritesData);
-//     } catch (error) {
-//       favorites = [];
-//     }
-  
-//     console.log(favorites);
-  
-//   return (
-//     <>
-//       <Head>
-//         <title>Favorite Opportunities</title>
-//         <meta name="description" content="Generated by react" />
-//         <meta name="viewport" content="width=device-width, initial-scale=1" />
-//         <link rel="icon" href="/favicon.ico" />
-//       </Head>
-
-//       <main>
-//         <Header />
-//         <div style={{ margin: "95px 20px" }}>
-//           <h2 id="projectTitle">Favorite Opportunities</h2>
-
-//           <div className="favorite-opportunities">
-//             {favorites.length > 0 ? (
-//               favorites.map((favorite, i) => (
-//                 <article key={i} className="favorite-card">
-//                   <header className="favorite-card-header">
-//                     <img
-//                       src={`/Images/${favorite.header_image}`}
-//                       alt="Beach with turtle"
-//                       className="favorite-header-image"
-//                     />
-//                   </header>
-//                   <div className="favorite-content">
-//                     <h2 className="favorite-title">{favorite.title}</h2>
-//                     <p className="favorite-description">
-//                       {favorite.description}
-//                     </p>
-//                   </div>
-//                 </article>
-//               ))
-//             ) : (
-//               <div>No favorite opportunities yet.</div>
-//             )}
-//           </div>
-//         </div>
-//         <Footer />
-//       </main>
-//     </>
-//   );
-// }
+function getImageSrc(headerImage) {
+  // Check if headerImage starts with 'http://' or 'https://'
+  if (/^https?:\/\//.test(headerImage)) {
+    return headerImage;
+  } else {
+    return `/Images/${headerImage}`;
+  }
+}
