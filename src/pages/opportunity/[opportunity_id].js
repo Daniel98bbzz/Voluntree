@@ -4,10 +4,16 @@ import Header from "../../../public/Components/Header";
 import Footer from "../../../public/Components/Footer";
 import mongoose from "mongoose";
 import opportunityModel from "../../../models/opportunityModel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import jwt from "jsonwebtoken";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import toast from "react-hot-toast";
 
 export async function getServerSideProps(context) {
   const { opportunity_id } = context.params;
+  const { req } = context;
 
   try {
     if (opportunity_id) {
@@ -16,25 +22,91 @@ export async function getServerSideProps(context) {
         _id: opportunity_id,
       });
 
+      const jwtSession = req.cookies.jwtSession;
+      const userSession = jwt.decode(jwtSession);
+
       return {
-        props: { data: JSON.stringify(opportunities) },
+        props: {
+          data: JSON.stringify(opportunities),
+          user: JSON.stringify(userSession) || "null",
+        },
       };
     }
     return {
-      props: { data: "error" },
+      props: { data: "error", user: "null" },
     };
   } catch (error) {
     return {
-      props: { data: "error" },
+      props: { data: "error", user: "null" },
     };
   }
 }
 
-export default function OpportunityDetails({ data }) {
-  const opportunity = JSON.parse(data)[0];
-  console.log(opportunity);
+export default function OpportunityDetails({ data, user }) {
+  let opportunity;
+  try {
+    opportunity = JSON.parse(data)[0];
+  } catch (error) {
+    opportunity == "error";
+  }
+
+  let userData;
+  if (user != "null") {
+    userData = JSON.parse(user);
+  }
 
   const [currentTab, setCurrentTab] = useState(0);
+  const [showReviews, setShowReviews] = useState(false);
+
+  const router = useRouter();
+
+  function applyOpportunityButton() {
+    toast.promise(applyOpportunity(), {
+      loading: "Loading...",
+      success: () => {
+        setTimeout(() => {
+          router.push("/applications");
+        }, 1000);
+        return "Applied Successfully";
+      },
+      error: "Error, Try Again",
+    });
+  }
+
+  async function applyOpportunity() {
+    const applyData = {
+      volunteer_id: userData.id,
+      farmer_id: opportunity.information.farmer_id,
+      title: opportunity.title,
+      opportunity_id: opportunity._id,
+      volunteer_username: userData.username,
+    };
+
+    try {
+      const res = await fetch("/api/apply", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(applyData),
+      });
+      if (!res.ok) {
+        throw new Error();
+      }
+      const responseData = await res.json();
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  const totalRatings = opportunity.overview.reviews.length;
+  const sumRatings = opportunity.overview.reviews.reduce((sum, review) => {
+    return sum + parseFloat(review.rating);
+  }, 0);
+
+  const avgRatings =
+    totalRatings > 0 ? (sumRatings / totalRatings).toFixed(1) : "N/A";
+
   return (
     <>
       <Head>
@@ -48,212 +120,286 @@ export default function OpportunityDetails({ data }) {
         <Header />
 
         <img
-          src={`/Images/${opportunity.header_image}`}
+          src={getImageSrc(opportunity.header_image)}
           alt="farmer image"
           className="project-image"
         />
-        <div style={{ marginBottom: 70 }} className="project-card">
-          <div className="title-and-rating">
-            <h1 id="projectTitle">{opportunity.title}</h1>
-            <div className="volunteer-rating">
-              <span className="rating" id="projectStars">
-                {opportunity.rating.score}
-              </span>
-              <img className="star" src="/Images/svgs/star.svg" alt="Star" />
-              <span
-                style={{ marginLeft: 5 }}
-                className="total-ratings"
-                id="projectReviews"
-              >
-                ({opportunity.rating.total_reviews})
-              </span>
+
+        {opportunity != "error" ? (
+          <div style={{ marginBottom: 70 }} className="project-card">
+            <div className="title-and-rating">
+              <h1 id="projectTitle">{opportunity.title}</h1>
+              <div className="volunteer-rating">
+                <span className="rating" id="projectStars">
+                  {avgRatings}
+                </span>
+                <img className="star" src="/Images/svgs/star.svg" alt="Star" />
+                <span
+                  style={{ marginLeft: 5 }}
+                  className="total-ratings"
+                  id="projectReviews"
+                >
+                  ({totalRatings})
+                </span>
+              </div>
             </div>
-          </div>
-          <nav className="project-nav">
-            <button
-              id="overviewTab"
-              className={`tab-button ${currentTab == 0 && "active"}`}
-              onClick={() => setCurrentTab(0)}
-            >
-              Overview
-            </button>
-            <button
-              id="informationTab"
-              className={`tab-button ${currentTab == 1 && "active"}`}
-              onClick={() => setCurrentTab(1)}
-            >
-              Information
-            </button>
-            <button
-              id="locationTab"
-              className={`tab-button ${currentTab == 2 && "active"}`}
-              onClick={() => setCurrentTab(2)}
-            >
-              Location
-            </button>
-          </nav>
-          <div className="project-details">
-            <section
-              id="overview"
-              style={{ display: currentTab == 0 ? `block` : `none` }}
-              className="tab-content"
-            >
-              <div className="project-badges">
-                <span className="badge2 verified">
-                  <img
-                    src="/Images/svgs/verified.svg"
-                    alt="Verified"
-                    className="icon"
-                  />{" "}
-                  Verified By Volunteer Membership
-                </span>
-                <span className="badge2 response-rate">
-                  <img
-                    src="/Images/svgs/messagesResponse-3.svg"
-                    alt="Response Rate"
-                    className="icon"
-                  />{" "}
-                  Very High Response Rate
-                </span>
-              </div>
-              <div className="project-description">
-                <h2>About Our Project</h2>
-                <p id="projectDescription">
-                  {opportunity.overview.detailed_description ?? ""}
-                </p>
-              </div>
-              <div className="project-reviews">
-                <h2>Ratings And Reviews</h2>
-                <div className="user-review">
-                  <span className="user-rating" id="userRating">
-                    <StarsView
-                      stars={opportunity.overview.reviews[0].rating ?? 0}
-                    />
+            <nav className="project-nav">
+              <button
+                id="overviewTab"
+                className={`tab-button ${currentTab == 0 && "active"}`}
+                onClick={() => setCurrentTab(0)}
+              >
+                Overview
+              </button>
+              <button
+                id="informationTab"
+                className={`tab-button ${currentTab == 1 && "active"}`}
+                onClick={() => setCurrentTab(1)}
+              >
+                Information
+              </button>
+              <button
+                id="locationTab"
+                className={`tab-button ${currentTab == 2 && "active"}`}
+                onClick={() => setCurrentTab(2)}
+              >
+                Location
+              </button>
+            </nav>
+            <div className="project-details">
+              <section
+                id="overview"
+                style={{ display: currentTab == 0 ? `block` : `none` }}
+                className="tab-content"
+              >
+                <div className="project-badges">
+                  {opportunity.verified_by_volunteer_membership && (
+                    <span className="badge2 verified">
+                      <img
+                        src="/Images/svgs/verified.svg"
+                        alt="Verified"
+                        className="icon"
+                      />{" "}
+                      Verified By Volunteer Membership
+                    </span>
+                  )}
+
+                  <span className="badge2 response-rate">
+                    <img
+                      src="/Images/svgs/messagesResponse-3.svg"
+                      alt="Response Rate"
+                      className="icon"
+                    />{" "}
+                    {opportunity.response_rate} Response Rate
                   </span>
-                  <p className="user-comment" id="userComment">
-                    {opportunity.overview.reviews[0].comment ?? 0}...{" "}
-                    <a href="#" className="all-reviews">
-                      All The Reviews
-                    </a>
+                </div>
+                <div className="project-description">
+                  <h2>About Our Project</h2>
+                  <p id="projectDescription">
+                    {opportunity.overview.detailed_description ?? ""}
                   </p>
                 </div>
-              </div>
-              <button type="button" className="apply-button">
-                Apply
-              </button>
-            </section>
+                <div className="project-reviews">
+                  <h2>Ratings And Reviews</h2>
+                  <div className="user-review">
+                    {showReviews ? (
+                      <>
+                        {opportunity.overview.reviews.map((review, i) => (
+                          <div
+                            style={{
+                              borderBottom: "1px solid rgba(0,0,0,0.2)",
+                              marginBottom: 10,
+                              paddingBottom: 10,
+                            }}
+                            key={i}
+                          >
+                            <span className="user-rating" id="userRating">
+                              <StarsView
+                                stars={
+                                  opportunity.overview.reviews[i].rating ?? 0
+                                }
+                              />
+                            </span>
+                            <p className="user-comment" id="userComment">
+                              {opportunity.overview.reviews[i].comment ?? 0}
+                            </p>
+                          </div>
+                        ))}
 
-            <section
-              id="information"
-              style={{ display: currentTab == 1 ? `block` : `none` }}
-              className="tab-content"
-            >
-              <h2>Details</h2>
-              <ul className="details-list">
-                <li>
-                  <img
-                    src="/Images/svgsInformation/location1.svg"
-                    alt="Location"
-                    className="icon"
-                  />
-                  {opportunity.location_details.address}
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/calendar3.svg"
-                    alt="Calendar"
-                    className="icon"
-                  />{" "}
-                  {opportunity.information.details.availability}
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/clock.svg"
-                    alt="Clock"
-                    className="icon"
-                  />
-                  Working hours from{" "}
-                  {opportunity.information.details.working_hours}
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/group.svg"
-                    alt="People"
-                    className="icon"
-                  />{" "}
-                  Up to {opportunity.information.details.volunteers_needed}{" "}
-                  volunteer for single day
-                </li>
-                <li>
-                  <img
-                    src="/Images/svgsInformation/gauge1.svg"
-                    alt="Difficulty"
-                    className="icon"
-                  />{" "}
-                  Level of difficulty -{" "}
-                  {opportunity.information.details.difficulty_level}
-                </li>
-              </ul>
-              <h2>Include</h2>
-              <ul className="include-list">
-                {opportunity.information.includes.food_beverages && (
-                  <li>
-                    <img
-                      src="/Images/svgsInformation/food.svg"
-                      alt="Food"
-                      className="icon"
-                    />{" "}
-                    Food & Beverages
-                  </li>
+                        <a
+                          href="#"
+                          className="all-reviews"
+                          onClick={() => setShowReviews(false)}
+                        >
+                          Close Reviews
+                        </a>
+                      </>
+                    ) : (
+                      <>
+                        <span className="user-rating" id="userRating">
+                          <StarsView
+                            stars={opportunity.overview.reviews[0].rating ?? 0}
+                          />
+                        </span>
+                        <p className="user-comment" id="userComment">
+                          {opportunity.overview.reviews[0].comment ?? 0}...{" "}
+                          <a
+                            onClick={() => setShowReviews(true)}
+                            href="#"
+                            className="all-reviews"
+                          >
+                            All The Reviews
+                          </a>
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+                {userData ? (
+                  userData.role == "volunteer" && (
+                    <button
+                      onClick={() => applyOpportunityButton()}
+                      className="apply-button"
+                    >
+                      Apply
+                    </button>
+                  )
+                ) : (
+                  <Link href={"/login"} passHref className="apply-button">
+                    Login To Apply
+                  </Link>
                 )}
+              </section>
 
-                {opportunity.information.includes.internet_access && (
+              <section
+                id="information"
+                style={{ display: currentTab == 1 ? `block` : `none` }}
+                className="tab-content"
+              >
+                <h2>Details</h2>
+                <ul className="details-list">
                   <li>
                     <img
-                      src="/Images/svgsInformation/wifi.svg"
-                      alt="WiFi"
+                      src="/Images/svgsInformation/location1.svg"
+                      alt="Location"
                       className="icon"
-                    />{" "}
-                    Internet Access
+                    />
+                    {opportunity.location_details.address}
                   </li>
-                )}
-                {opportunity.information.includes.internet_access && (
                   <li>
                     <img
-                      src="/Images/svgsInformation/bed1.svg"
-                      alt="Accommodation"
+                      src="/Images/svgsInformation/calendar3.svg"
+                      alt="Calendar"
                       className="icon"
                     />{" "}
-                    Accommodation
+                    {opportunity.information.details.availability}
                   </li>
-                )}
-              </ul>
-              <h2>About The Farmer</h2>
-              <p>{opportunity.information.about_farmer}</p>
-            </section>
-            <section
-              id="location"
-              style={{ display: currentTab == 2 ? `block` : `none` }}
-              className="tab-content"
-            >
-              <h2>Location details</h2>
-              {/* <iframe
-                width="100%"
-                height="300"
-                frameborder="0"
-                scrolling="no"
-                marginheight="0"
-                marginwidth="0"
-                src="https://maps.google.com/maps?width=100%25&amp;height=300&amp;hl=en&amp;q=31.0461,34.8516+()&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-              ></iframe>
-              <iframe
-                src={`https://maps.google.com/maps?q=${opportunity.location_details.coordinates.lat},${opportunity.location_details.coordinates.lng}&hl=es;z=14&amp;output=embed`}
-              ></iframe> */}
-            </section>
-            <section className="project-reviews"></section>
+                  <li>
+                    <img
+                      src="/Images/svgsInformation/clock.svg"
+                      alt="Clock"
+                      className="icon"
+                    />
+                    Working hours from{" "}
+                    {opportunity.information.details.working_hours}
+                  </li>
+                  <li>
+                    <img
+                      src="/Images/svgsInformation/group.svg"
+                      alt="People"
+                      className="icon"
+                    />{" "}
+                    Up to {opportunity.information.details.volunteers_needed}{" "}
+                    volunteer for single day
+                  </li>
+                  <li>
+                    <img
+                      src="/Images/svgsInformation/gauge1.svg"
+                      alt="Difficulty"
+                      className="icon"
+                    />{" "}
+                    Level of difficulty -{" "}
+                    {opportunity.information.details.difficulty_level}
+                  </li>
+                </ul>
+                <h2>Include</h2>
+                <ul className="include-list">
+                  {opportunity.information.includes.food_beverages && (
+                    <li>
+                      <img
+                        src="/Images/svgsInformation/food.svg"
+                        alt="Food"
+                        className="icon"
+                      />{" "}
+                      Food & Beverages
+                    </li>
+                  )}
+
+                  {opportunity.information.includes.internet_access && (
+                    <li>
+                      <img
+                        src="/Images/svgsInformation/wifi.svg"
+                        alt="WiFi"
+                        className="icon"
+                      />{" "}
+                      Internet Access
+                    </li>
+                  )}
+                  {opportunity.information.includes.internet_access && (
+                    <li>
+                      <img
+                        src="/Images/svgsInformation/bed1.svg"
+                        alt="Accommodation"
+                        className="icon"
+                      />{" "}
+                      Accommodation
+                    </li>
+                  )}
+                </ul>
+                <h2>About The Farmer</h2>
+                <p>{opportunity.information.about_farmer}</p>
+              </section>
+              <section
+                id="location"
+                style={{ display: currentTab == 2 ? `block` : `none` }}
+                className="tab-content"
+              >
+                <h2>Location details</h2>
+
+                <LoadScript
+                  googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS} // Replace YOUR_API_KEY with your actual API key
+                >
+                  <GoogleMap
+                    mapContainerStyle={{ width: "100%", height: "400px" }}
+                    center={{
+                      lat: opportunity.location_details.coordinates.lat,
+                      lng: opportunity.location_details.coordinates.lng,
+                    }}
+                    zoom={15}
+                  >
+                    <Marker
+                      icon={{
+                        path: "/Images/svgs/google-marker.svg",
+                      }}
+                      title="click"
+                      position={{
+                        lat: opportunity.location_details.coordinates.lat,
+                        lng: opportunity.location_details.coordinates.lng,
+                      }}
+                    />
+                  </GoogleMap>
+                </LoadScript>
+              </section>
+              <section className="project-reviews"></section>
+            </div>
           </div>
-        </div>
-        <Footer />
+        ) : (
+          <div style={{ marginTop: 90 }}>
+            <h4>No opportunity found.</h4>
+          </div>
+        )}
+
+        <Footer volunteer={userData && userData.role == "volunteer"} />
       </main>
     </>
   );
@@ -270,4 +416,13 @@ function StarsView(stars) {
       ))}
     </span>
   );
+}
+
+function getImageSrc(headerImage) {
+  // Check if headerImage starts with 'http://' or 'https://'
+  if (/^https?:\/\//.test(headerImage)) {
+    return headerImage;
+  } else {
+    return `/Images/${headerImage}`;
+  }
 }
