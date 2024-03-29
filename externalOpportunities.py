@@ -8,7 +8,7 @@ db_user = 'voluntreeUser'
 db_pass = '1234'  # Make sure to use your actual password in a secure way
 db_host = 'cluster0.ghibpdj.mongodb.net'
 db_name = 'volunteeringOpportunitiesDB'  # Replace with the name of your database
-collection_name = 'opportunitykaki'  # Replace with the name of your collection
+collection_name = 'opportunities'  # Replace with the name of your collection
 
 # Construct the MongoDB Atlas connection string
 conn_string = f'mongodb+srv://{db_user}:{db_pass}@{db_host}/{db_name}?retryWrites=true&w=majority'
@@ -62,6 +62,7 @@ while(proceed):
 
     if no_results_div:
         proceed = False
+        
     else:
         all_opportunities = soup.find_all("article", class_="m-[5px] flex h-full w-full flex-col overflow-hidden rounded-[10px] bg-white shadow-[rgba(0,0,0,0.14)_0px_2px_2px_0px,rgba(0,0,0,0.12)_0px_1px_5px_0px,rgba(0,0,0,0.2)_0px_3px_1px_-2px]")
         # Process the found opportunities here
