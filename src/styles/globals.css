@@ -50,6 +50,23 @@ body {
   margin-top: 8px;
 }
 
+notifications-icon,
+.chat-icon {
+  background: none;
+  border: none;
+  /* Adjust the width to your liking */
+  margin: 0 10px;
+}
+
+/* 
+.notifications-icon {
+  position: relative;
+  right: 35px;
+  top: 1px;
+  width: 47px;
+  margin-bottom: 8px;
+} */
+
 .notifications-icon,
 .chat-icon {
   background: none;
@@ -60,7 +77,7 @@ body {
 
 .notifications-icon {
   position: relative;
-  right: 35px;
+  right: 10px;
   top: 1px;
   width: 47px;
   margin-bottom: 8px;
@@ -79,7 +96,8 @@ body {
   display: block;
   max-width: 100%;
   height: auto;
-  margin-top: 10px;
+  margin: 5px 0px;
+  scale: 0.9;
 }
 
 .header-logo {
@@ -94,6 +112,43 @@ body {
 .chat-icon:last-child {
   margin-right: 0;
   /* Remove right margin from the last icon */
+}
+
+.notifications-dropdown {
+  position: absolute;
+  top: 100%;
+  /* Align the top of the dropdown with the bottom of the button */
+  right: 0;
+  /* Align the dropdown to the right side of the header */
+  width: 250px;
+  /* Set a fixed width for the dropdown */
+  background-color: white;
+  /* Choose a background color that fits your theme */
+  border: 1px solid #ddd;
+  /* Optional border */
+  border-radius: 4px;
+  /* Optional border radius */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Optional shadow for better visibility */
+  z-index: 1000;
+  /* Make sure the dropdown is above other content */
+}
+
+/* Style for individual notification items */
+.notifications-dropdown li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+/* Style for the last item without a border */
+.notifications-dropdown li:last-child {
+  border-bottom: none;
+}
+
+/* Hover effect for notification items */
+.notifications-dropdown li:hover {
+  background-color: #f9f9f9;
 }
 
 .project-card {
@@ -289,6 +344,29 @@ h2 {
 }
 
 @media (max-width: 768px) {
+  .notifications-dropdown {
+    /* Make the dropdown full width on mobile for better visibility */
+    width: calc(100% - 20px);
+    /* Subtract some px for padding */
+    right: 10px;
+    /* Adjust right position to align with the width */
+    left: 0px;
+    /* Add left position to maintain padding from the screen edges */
+    box-sizing: border-box;
+    /* Include padding and border in the element's width */
+  }
+
+  .notifications-dropdown li {
+    /* Increase padding for larger touch targets on mobile */
+    padding: 10px;
+  }
+
+  .return-icon,
+  .notifications-icon {
+    display: block;
+    margin-bottom: 5px;
+  }
+
   .project-card {
     width: 90%;
   }
@@ -301,6 +379,15 @@ h2 {
   .farm {
     width: auto;
     margin-right: 10px;
+    box-shadow: 0 6px 7px 0px rgb(0 0 0 / 0.03),
+      0 4px 7px -0px rgb(0 0 0 / 0.03);
+  }
+
+  .farm .divider {
+    height: 1px;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin: 15px 0px;
   }
 
   .opportunity {
@@ -339,13 +426,17 @@ h2 {
   width: 90%;
   max-width: 600px;
   /* Adjusted width */
-  background-color: green;
+  background: linear-gradient(
+    180deg,
+    rgb(6, 168, 6) 0%,
+    rgba(0, 128, 0, 1) 100%
+  );
   color: white;
   padding: 20px;
   margin: 70px auto 20px;
   /* Adjusted margin */
   text-align: center;
-  border-radius: 10px;
+  border-radius: 14px;
 }
 
 .button {
@@ -354,8 +445,11 @@ h2 {
   background-color: white;
   color: green;
   text-decoration: none;
-  border-radius: 5px;
-  margin-top: 10px;
+  border-radius: 6px;
+  margin: 10px 0px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 20px 25px -2px rgb(0 0 0 / 0.12),
+    0 8px 10px -3px rgb(0 0 0 / 0.15);
 }
 
 .selection-heading {
@@ -369,6 +463,7 @@ h2 {
   display: flex;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
 .region {
@@ -377,7 +472,7 @@ h2 {
   padding: 20px;
   margin: 0 10px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 15px;
   border: 2px solid #ccc;
   white-space: nowrap;
 }
@@ -385,7 +480,7 @@ h2 {
 .next-to-you {
   font-size: 24px;
   font-weight: bold;
-  margin-top: 40px;
+  margin-top: 20px;
   margin-bottom: 20px;
 }
 
@@ -393,17 +488,19 @@ h2 {
   display: flex;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
 .farm {
   flex: 1;
   text-align: center;
-  padding: 30px;
+  padding: 25px;
   margin: 0 10px;
   background-color: white;
   border-radius: 15px;
   border: 2px solid #ccc;
   white-space: nowrap;
+  height: 80%;
 }
 
 .farm-link {
@@ -420,10 +517,18 @@ h2 {
   display: none;
 }
 
-.rating label {
+.rating .gray {
   font-size: 24px;
   /* Adjust the size of the star icons */
   color: #ccc;
+  /* Color for empty star */
+  cursor: pointer;
+}
+
+.rating .yellow {
+  font-size: 24px;
+  /* Adjust the size of the star icons */
+  color: #f29f05;
   /* Color for empty star */
   cursor: pointer;
 }
@@ -437,6 +542,8 @@ h2 {
   color: black;
   font-size: 18px;
   font-weight: bold;
+  white-space: initial;
+  /* max-width: 200px; */
 }
 
 .farm img {
@@ -448,7 +555,7 @@ h2 {
   /* Set the maximum width of the image */
   max-height: 100px;
   /* Set the maximum height of the image */
-  border-radius: 10px;
+  border-radius: 8px;
   /* Apply border radius for rectangle shape */
   margin-bottom: 10px;
   /* Add some bottom margin for spacing */
@@ -463,18 +570,23 @@ h2 {
 .opportunity-container {
   display: flex;
   overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: none;
+  scrollbar-width: none;
 }
 
 .opportunity {
-  flex: 0 0 calc(33.33% - 20px);
   margin: 10px;
   padding: 20px;
   background-color: white;
   border-radius: 15px;
   border: 2px solid #ccc;
   display: flex;
+  flex-direction: column;
   align-items: center;
+  min-width: 200px;
+  max-width: 200px;
+  text-align: center;
+  box-shadow: 0 6px 7px 0px rgb(0 0 0 / 0.03), 0 4px 7px -0px rgb(0 0 0 / 0.03);
 }
 
 .opportunity img {
@@ -486,7 +598,7 @@ h2 {
   max-height: 80px;
   /* Adjust maximum height of the image */
   border-radius: 10px;
-  margin-right: 10px;
+  /* margin-right: 20px; */
 }
 
 .opportunity-text {
@@ -503,12 +615,6 @@ h2 {
 .opportunity p.description {
   color: black;
   font-size: 16px;
-  overflow: hidden;
-  /* Prevent text from overflowing */
-  text-overflow: ellipsis;
-  /* Add ellipsis for overflow text */
-  white-space: nowrap;
-  /* Prevent text from wrapping */
 }
 
 .selection-heading,
@@ -517,6 +623,7 @@ h2 {
   font-size: 20px;
   margin-top: 20px;
   margin-bottom: 10px;
+  scrollbar-width: none;
 }
 
 .volunteer-footer {
@@ -657,13 +764,25 @@ h2 {
 
 .heart-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 34px;
   cursor: pointer;
   color: #fff;
+  /* Assuming a white heart icon as per the image */
+}
+
+.heart-button-fill {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 34px;
+  cursor: pointer;
+  color: #ff8d8d;
   /* Assuming a white heart icon as per the image */
 }
 
@@ -676,6 +795,7 @@ h2 {
   padding: 5px 10px;
   font-size: 0.75rem;
 }
+
 .badge2 {
   background-color: #ffa500;
   /* Example color */
@@ -717,6 +837,10 @@ h2 {
   color: #f29f05;
   font-weight: bold;
   margin-right: 5px;
+}
+
+.rating_true {
+  color: #f29f05;
 }
 
 .star {
@@ -765,7 +889,7 @@ h2 {
   color: rgb(0, 0, 0);
   font-size: 0.8125rem;
   text-align: center;
-  margin-left: 50px;
+  /* margin-left: 50px; */
 }
 
 .service {
@@ -902,9 +1026,10 @@ h2 {
     /* Remove padding if necessary for alignment */
   }
 
-  .heart-button {
-    top: 5px;
-    right: 5px;
+  .heart-button,
+  .heart-button-fill {
+    top: 10px;
+    right: 15px;
   }
 
   .badge,
@@ -1090,6 +1215,7 @@ h2 {
   color: white;
   cursor: pointer;
 }
+
 .container-login form input[type="submit"]:hover {
   background: #4cae4c;
 }
@@ -1100,6 +1226,7 @@ h2 {
   padding: 20px;
   text-align: center;
 }
+
 .container-register form input[type="email"],
 .container-register form input[type="text"],
 .container-register form input[type="password"] {
@@ -1109,6 +1236,7 @@ h2 {
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
 .container-register form input[type="submit"] {
   width: 100%;
   padding: 10px;
@@ -1118,6 +1246,7 @@ h2 {
   color: white;
   cursor: pointer;
 }
+
 .container-register form input[type="submit"]:hover {
   background: #286090;
 }
@@ -1150,4 +1279,269 @@ button {
   border: none;
   background: white;
   padding: 0;
+}
+
+.my-applications {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.vol-application {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  text-decoration: none;
+}
+
+.vol-application img {
+  height: 120px;
+  width: 120px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px 0 0 10px;
+}
+
+.vol-application .date {
+  font-size: 13px;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.vol-application .approved {
+  padding: 5px 8px;
+  background-color: #4caf50;
+  color: white;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  border-radius: 6px;
+  width: fit-content;
+  font-size: 11px;
+  letter-spacing: 0.01em;
+}
+
+.vol-application .flex {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.vol-application .declined {
+  padding: 5px 8px;
+  background-color: #d33b3b;
+  color: white;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  border-radius: 6px;
+  width: fit-content;
+  font-size: 11px;
+  letter-spacing: 0.01em;
+}
+
+.vol-application .pending {
+  padding: 5px 8px;
+  background-color: rgba(0, 0, 0, 0.4);
+  color: white;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  border-radius: 6px;
+  width: fit-content;
+  font-size: 11px;
+  letter-spacing: 0.01em;
+}
+
+.vol-application svg {
+  position: absolute;
+  right: 10px;
+  transform: rotate(180deg);
+}
+
+.requests-list {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.request-item {
+  padding: 8px 20px 12px 20px;
+  display: flex;
+  column-gap: 7px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.req-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  column-gap: 8px;
+  margin-top: 15px;
+}
+
+.req-buttons .accept,
+.req-buttons .approved {
+  padding: 7px 12px;
+  font-size: 14px;
+  color: white;
+  background-color: #4caf50;
+  border-radius: 6px;
+}
+
+.req-buttons .decline,
+.req-buttons .declined {
+  padding: 7px 12px;
+  font-size: 14px;
+  color: white;
+  background-color: #cd3a3a;
+  border-radius: 6px;
+}
+
+.request-item .date {
+  font-size: 14px;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.profile-page {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+  padding-bottom: 10px;
+}
+
+.profile-page p,
+.profile-wrap p {
+  font-size: 17px;
+  margin: 12px 0;
+}
+
+.profile-wrap-title {
+  font-weight: bolder;
+  margin-bottom: -8px !important;
+}
+
+.profile-page .divider {
+  height: 2px;
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin: 15px 0px;
+}
+
+.profile-wrap {
+  text-align: start;
+  padding: 10px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.profile-flex {
+  text-align: start;
+  padding: 20px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+  appearance: none;
+  text-decoration: none;
+  color: #000000;
+}
+
+.profile-flex p {
+  font-size: 17px;
+  margin: 0;
+}
+
+.logout-button {
+  padding: 12px 16px;
+  font-size: 15px;
+  color: white;
+  background-color: #cd3a3a;
+  border-radius: 6px;
+  margin-top: 20px;
+  width: 90%;
+}
+
+.header-applications {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Rating Modal */
+.modal-body {
+  background: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  right: 0%;
+  bottom: 62px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.modal-box {
+  width: 100vw;
+  background: white;
+  padding: 8px 25px;
+
+  position: relative;
+}
+
+.comment-textarea {
+  appearance: none;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgb(0 0 0 / 0.4);
+  font-family: Arial, Helvetica, sans-serif;
+  outline: none;
+  font-size: 15px;
+}
+
+.opportunity-form textarea {
+  font-family: Arial, Helvetica, sans-serif;
+  outline: none;
+  font-size: 13px;
+}
+
+.submit-rate-button {
+  background: #4cae4c;
+  color: white;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0px;
+  border-radius: 5px;
+}
+
+.remove-service-button {
+  padding: 8px 12px;
+  color: white;
+  background: #d33b3b;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.add-service-button {
+  padding: 8px 12px;
+  color: white;
+  background: #4cae4c;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.services-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.distance-flex {
+  font-size: 13px !important;
+  font-weight: 300 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 2px;
 }
