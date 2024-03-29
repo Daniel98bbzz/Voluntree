@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     enum: ["farmer", "volunteer"],
     required: true,
   },
-  test: {
+  u_id: {
     type: String,
     required: false,
   },
@@ -58,6 +58,36 @@ const userSchema = new mongoose.Schema({
       volunteer_username: {
         type: String,
         required: false,
+      },
+    },
+  ],
+  myOpportunities: [
+    {
+      title: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      opportunity_id: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+  favorites: [
+    {
+      date: {
+        type: Date,
+        required: true,
+      },
+      title: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      opportunity_id: {
+        type: String,
+        required: true,
       },
     },
   ],

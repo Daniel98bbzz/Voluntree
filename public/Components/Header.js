@@ -1,14 +1,55 @@
 /* eslint-disable @next/next/no-img-element */
-export default function Header() {
+import { useState, useEffect, useRef } from "react";
+
+export default function Header({ showBackButton = true }) {
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+
+  const notificationRef = useRef();
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+    if (!showNotifications) {
+      // Fetch notifications when opening the dropdown
+      fetch(`/api/notifications`)
+        .then((res) => res.json())
+        .then((data) => {
+          setNotifications(data);
+        })
+        .catch((error) => console.error("Error:", error));
+    }
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <header className="main-header">
-      <button className="return-icon">
-        <img
-          src="/Images/svgsInformation/arrow.svg"
-          className="return"
-          alt="return"
-        />
-      </button>
+    <header
+      style={{ justifyContent: showBackButton ? `space-between` : `flex-end` }}
+      className="main-header"
+    >
+      {showBackButton && (
+        <button className="return-icon">
+          <img
+            src="/Images/svgsInformation/arrow.svg"
+            className="return"
+            alt="return"
+          />
+        </button>
+      )}
 
       <img
         src="/Images/logo.PNG"
@@ -16,7 +57,7 @@ export default function Header() {
         className="header-logo"
       />
 
-      <button className="notifications-icon">
+      <button className="notifications-icon" onClick={toggleNotifications}>
         <img
           className="notification"
           src="/Images/svgsInformation/notification.svg"
@@ -24,13 +65,19 @@ export default function Header() {
         />
       </button>
 
-      <button className="chat-icon">
-        <img
-          className="chat"
-          src="/Images/svgsInformation/message5.svg"
-          alt="chat"
-        />
-      </button>
+      {showNotifications && (
+        <div ref={notificationRef} className="notifications-dropdown">
+          <ul>
+            {notifications.length > 0 ? (
+              notifications.map((notification) => (
+                <li key={notification._id}>{notification.message}</li>
+              ))
+            ) : (
+              <li>No new notifications</li>
+            )}
+          </ul>
+        </div>
+      )}
     </header>
   );
 }
