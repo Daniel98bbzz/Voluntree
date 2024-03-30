@@ -87,6 +87,7 @@ export async function getServerSideProps(context) {
   const hostUrl = `${protocol}://${host}`;
   try {
     const res = await fetch(`${hostUrl}/api/opportunities`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
